@@ -1,0 +1,252 @@
+@import './variables';
+
+.individualPage {
+    background-color: #F0F6F4;
+    min-height: 100vh;
+    padding-bottom: 40px;
+
+    .controls {
+        background-color: white;
+        width: 100%;
+        padding-top: 60px;
+
+        .controlsContainer {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 1220px;
+            height: 200px;
+
+        }
+
+        .controlWhite {
+            margin-top: 10px;
+            background-color: #F0F6F4;
+
+            .controlWhiteContainer {
+                margin: 0 auto;
+                padding: 20px;
+                max-width: 1220px;
+            }
+        }
+    }
+
+    .contentContainer {
+        margin: 0 auto;
+        max-width: 1220px;
+        padding: 0 20px;
+    }
+}
+
+.section {
+
+    border: 1px solid #5D9AAE;
+    // opacity: 1;
+    // max-height: 200px;
+
+    .sectionHeader {
+        padding: 10px;
+        background-color: #5D9AAE;
+
+        .sectionLabel {
+            // font-family: 'bnpp_sansregular';
+            font-family: Tahoma, Verdana, Segoe, sans-serif; 
+            font-size: 12px;
+            margin-left: 10px;
+            color: white;
+            text-transform: uppercase;
+        }
+    }
+
+    &.hide {
+        &::after {
+            content: "No forms needed in this section";
+            display: block;
+            padding: 10px 20px;
+        }
+
+        // transition: max-height 220ms ease-out, opacity 220ms ease-out;
+        // opacity: 0;
+        // max-height: 0;
+    }
+}
+
+.rowContainer {
+    transition: max-height 620ms ease-out, opacity 620ms ease-out;
+    height: auto;
+    overflow: hidden;
+
+    opacity: 0;
+    max-height: 0;
+
+    &.show {
+        opacity: 1;
+        max-height: 200px;
+    }
+}
+
+.subSection {
+    .rowData {
+        border-style: solid;
+        border-width: 1px 0 0 0;
+        border-color: #5D9AAE;
+        padding: 20px 10px;
+        display: flex;
+        align-content: stretch;
+
+        >div {
+            margin: 0 10px;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 10px;
+            flex-grow: 0;
+            flex-basis: 106px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: flex-start;
+
+            .NOBadge {
+                display: none;
+            }
+
+            .NDMBadge {
+                @include noSelect;
+                color: #D0003A;
+                border: 1px solid #D0003A;
+            }
+
+            .mandatoryBadge {
+                @include noSelect;
+                color: #613E96;
+                border: 1px solid #613E96;
+            }
+
+            .badgeLabel {
+                flex-grow: 0;
+                border-radius: 12px;
+                padding: 4px 12px 2px 12px;
+
+                .label {
+                    // font-family: 'bnpp_sansregular';
+                    font-family: Tahoma, Verdana, Segoe, sans-serif; 
+                    width: auto;
+                    min-width: auto;
+                    white-space: nowrap;
+                    text-transform: uppercase;
+                }
+            }
+        }
+
+        .title {
+            flex-grow: 1;
+            flex-basis: 300px;
+            color: black;
+
+            .mainTitle {
+                font-size: 14px;
+                // font-family: 'bnpp_sansregular';
+                font-family: Tahoma, Verdana, Segoe, sans-serif; 
+            }
+
+            .subTitle {
+                font-size: 12px;
+            }
+
+            // background-color: rgba($color: rgb(135, 22, 228), $alpha: 0.2);
+        }
+
+        .forms {
+            // min-width: 100px;
+            flex-basis: 100px;
+            flex-grow: 1;
+            // background-color: rgba($color: rgb(15, 173, 126), $alpha: 0.2);
+
+            >div,
+            a {
+                // font-family: 'bnpp_sansregular';
+                font-family: Tahoma, Verdana, Segoe, sans-serif; 
+                font-size: 12px;
+                display: inline-block;
+
+                .badge {
+                    @include noSelect;
+                    padding: 8px 12px 8px 12px;
+                    border-radius: 4px;
+                    letter-spacing: 0.1em;
+                    color: white;
+                }
+            }
+
+            .noIcon {
+                display: none;
+            }
+
+            .downloadForm {
+                .badge {
+                    margin-bottom: 5px;
+                    background-color: #6BBBAE;
+                }
+
+                margin-right: 10px;
+            }
+
+            .trainingGuide {
+                .badge {
+                    margin-bottom: 5px;
+                    background-color: #3E4791;
+                }
+
+                margin-right: 10px;
+            }
+
+            .description {
+                // font-family: 'bnpp_sanslight';
+                font-family: Tahoma, Verdana, Segoe, sans-serif; 
+            }
+        }
+
+        .action {
+            // min-width: 100px;
+            flex-basis: 100px;
+            flex-grow: 1;
+            font-size: 14px;
+
+            // background-color: rgba($color: rgb(219, 147, 12), $alpha: 0.2);
+            >div {
+                display: inline;
+            }
+
+            .requireClient {
+                // font-family: 'bnpp_sansregular';
+                font-family: Tahoma, Verdana, Segoe, sans-serif; 
+            }
+
+            .requireRM {
+                // font-family: 'bnpp_sansregular';
+                font-family: Tahoma, Verdana, Segoe, sans-serif; 
+            }
+
+            .agmt {
+                span {
+                    // font-family: 'bnpp_sansregular';
+                    font-family: Tahoma, Verdana, Segoe, sans-serif; 
+                }
+            }
+
+            .notification {
+                display: block;
+                font-size: 12px;
+                background-color: #FCD3D3;
+                padding: 4px 12px;
+            }
+
+            .noNotification {
+                display: none;
+            }
+        }
+    }
+
+}

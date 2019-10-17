@@ -1,0 +1,6 @@
+@import './variables';
+
+.disabledOpacity {
+    opacity: 0.3;
+    @include noSelect;
+}

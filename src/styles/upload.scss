@@ -1,0 +1,26 @@
+.uploadContainer {
+    margin: 100px 60px;
+    width: 600px;
+
+    .btn {
+        margin-top: 60px;
+        width: 200px;
+    }
+}
+
+.uploaded {
+    margin: 100px 60px;
+    width: 600px;
+
+    &::after {
+        content: "Upload completed";
+        display: block;
+
+    }
+    * {
+        display: none;
+    }
+    .btn {
+        display: none;
+    }
+}
