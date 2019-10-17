@@ -28,7 +28,7 @@ module.exports = {
 			use: {
 				loader: 'babel-loader',
 				query: {
-					presets: ['@babel/env', '@babel/preset-react'],
+					presets: ['@babel/env'],
 					plugins: [],
 				}
 			}
@@ -112,19 +112,6 @@ module.exports = {
 		    {
 		        from: '../app/images/',
 		        to: '../dist/images/'
-			}, 
-			{
-		        from: '../app/downloads/',
-		        to: '../dist/downloads/'
-			}, 
-			{
-				from: '../app/exported_individual.json',
-		        to: '../dist/exported_individual.json'
-			}
-			, 
-			{
-				from: '../app/exported_product.json',
-		        to: '../dist/exported_product.json'
 			}
 		])
 	]
