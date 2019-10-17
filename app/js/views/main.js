@@ -127,7 +127,6 @@ export default class Main {
   }
 
   render() {
-    // Call render function and pass in created scene and camera
     this.renderer.render(this.scene, this.camera.threeCamera);
 
     // texture.needsUpdate = true;
@@ -139,7 +138,7 @@ export default class Main {
     }
 
 
-    requestAnimationFrame(this.render.bind(this)); // Bind the main class instead of window object
+    requestAnimationFrame(this.render.bind(this));
   }
 }
 

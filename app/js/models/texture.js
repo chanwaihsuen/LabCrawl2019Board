@@ -1,3 +1,5 @@
+'use strict';
+
 import * as THREE from 'three';
 // Promise polyfill for IE
 import { Promise } from 'es6-promise';

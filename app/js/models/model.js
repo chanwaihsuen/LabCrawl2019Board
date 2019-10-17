@@ -1,3 +1,5 @@
+'use strict';
+
 import * as THREE from 'three';
 
 import Material from '../helpers/material';

@@ -16,28 +16,10 @@ import {
 
 const imageArray = [base0, base1, base2, base3, base4, base5];
 
-export default class RoundedCard {
+export default class SquareCard {
 
   constructor(x = 0, y = 0) {
 
-    this.windMotion = new TimelineMax({
-      repeat: -1,
-      yoyo: false,
-      repeatDelay: 8 * Math.random()
-    });
-    this.cardsTimeline = new TimelineMax({
-      repeat: 0,
-      delay: 1,
-      repeatDelay: 1
-    });
-
-
-    this.mesh = this.createRoundedRect(x, y);
-    if (Math.random() > 0.5) {
-      this.mesh = this.createRoundedRect(x, y);
-    } else {
-      this.mesh = this.createSmallerRect(x, y);
-    }
 
   }
 
@@ -57,28 +39,7 @@ export default class RoundedCard {
   }
 
   createRoundedRect(x = 0, y = 0, width = 30, height = 30, radius = 2) {
-    var roundedRectShape = new THREE.Shape();
-
-    roundedRectShape.moveTo(x, y + radius);
-    roundedRectShape.lineTo(x, y + height - radius);
-    roundedRectShape.quadraticCurveTo(x, y + height, x + radius, y + height);
-    roundedRectShape.lineTo(x + width - radius, y + height);
-    roundedRectShape.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
-    roundedRectShape.lineTo(x + width, y + radius);
-    roundedRectShape.quadraticCurveTo(x + width, y, x + width - radius, y);
-    roundedRectShape.lineTo(x + radius, y);
-    roundedRectShape.quadraticCurveTo(x, y, x, y + radius);
-
-    var extrudeSettings = {
-      depth: 1,
-      bevelEnabled: true,
-      bevelSegments: 2,
-      steps: 1,
-      bevelSize: 0.1,
-      bevelThickness: 0.2,
-      material:0,
-      extrudeMaterial : 1
-    };
+    
 
     var geometry = new THREE.ExtrudeGeometry(roundedRectShape, extrudeSettings);
     //var materialCanvas = new THREE.MeshPhongMaterial();
@@ -201,40 +162,3 @@ export default class RoundedCard {
   }
 }
 
-
-function meshFitUvMap(mesh) {
-
-  if (mesh.geometry &&
-    mesh.material &&
-    mesh.material.map &&
-    mesh.material.map.userData &&
-    mesh.material.map.userData.fitTo > 0) {
-
-
-    var geometry = mesh.geometry;
-    var textureFitTo = mesh.material.map.userData.fitTo;
-    var faces = mesh.geometry.faces;
-
-    for (var i = 0, len = faces.length; i < len; i++) {
-      var face = faces[i];
-      var uv = geometry.faceVertexUvs[0][i];
-
-      var components = ['x', 'y', 'z'].sort(function (a, b) {
-        return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
-      });
-
-      var v1 = mesh.geometry.vertices[face.a];
-      var v2 = mesh.geometry.vertices[face.b];
-      var v3 = mesh.geometry.vertices[face.c];
-
-      var newUv0 = new THREE.Vector2(v1[components[0]] / textureFitTo, v1[components[1]] / textureFitTo);
-      var newUv1 = new THREE.Vector2(v2[components[0]] / textureFitTo, v2[components[1]] / textureFitTo);
-      var newUv2 = new THREE.Vector2(v3[components[0]] / textureFitTo, v3[components[1]] / textureFitTo);
-
-      uv[0].copy(newUv0);
-      uv[1].copy(newUv1);
-      uv[2].copy(newUv2);
-
-    }
-  }
-}
