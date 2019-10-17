@@ -1,8 +1,10 @@
 // @import './normalize';
-@import './font';
-@import './variables';
+@import "./font";
+@import "./variables";
 
-html {
-    font-size: 16px;
-    line-height: 1.4;
+html,
+body {
+  font-size: 16px;
+  margin: 0;
+  overflow: hidden;
 }

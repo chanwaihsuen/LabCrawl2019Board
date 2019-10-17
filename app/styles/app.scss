@@ -1,6 +1,7 @@
-@import './variables';
+@import "./variables";
 
-.disabledOpacity {
-    opacity: 0.3;
-    @include noSelect;
+.main {
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
