@@ -1,5 +1,6 @@
-import * as THREE from 'three';
+'use strict';
 
+import * as THREE from 'three';
 import OrbitControls from 'appRoot/js/utils/orbitControls';
 import Config from 'appRoot/data/config';
 

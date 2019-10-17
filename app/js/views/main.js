@@ -19,7 +19,7 @@ import Interaction from 'appRoot/js/managers/interaction';
 import DatGUI from 'appRoot/js/managers/datGUI';
 
 import RoundedCard from 'appRoot/js/models/roundedCard';
-
+import SquareCard from 'appRoot/js/models/squareCard';
 
 export default class Main {
 
@@ -51,6 +51,7 @@ export default class Main {
 
     // this.controls = new Controls(this.camera.threeCamera, container);
     // new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
+    
     new DatGUI(this, this.roundedCardArray[0]);
     new Keyboard();
 
@@ -75,7 +76,7 @@ export default class Main {
       }
       for (let noX = 0; noX < 4; noX++) {
 
-        var roundedCard = new RoundedCard(posX, posY);
+        var roundedCard = new SquareCard(posX, posY);
         this.roundedCardArray.push(roundedCard);
 
         if (noY < 4) {
@@ -94,7 +95,7 @@ export default class Main {
     this.scene.add(groupA);
     this.scene.add(groupB);
 
-    const timingOfMovingUp = 20;
+    const timingOfMovingUp = 40;
 
     TweenMax.to(groupA.position, timingOfMovingUp, {
       y: 256,
@@ -107,8 +108,6 @@ export default class Main {
       repeat: -1,
       ease: Linear.easeNone
     });
-
-
 
     document.addEventListener('keydown', (event) => {
       const keyCode = event.code;
@@ -137,7 +136,7 @@ export default class Main {
       this.roundedCardArray[i].texturereturn().needsUpdate = true;
     }
 
-
+    // this.controls.threeControls.update();
     requestAnimationFrame(this.render.bind(this));
   }
 }

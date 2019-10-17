@@ -31,7 +31,6 @@ export default class RoundedCard {
       repeatDelay: 1
     });
 
-
     this.mesh = this.createRoundedRect(x, y);
     if (Math.random() > 0.5) {
       this.mesh = this.createRoundedRect(x, y);
@@ -76,8 +75,8 @@ export default class RoundedCard {
       steps: 1,
       bevelSize: 0.1,
       bevelThickness: 0.2,
-      material:0,
-      extrudeMaterial : 1
+      material: 0,
+      extrudeMaterial: 1
     };
 
     var geometry = new THREE.ExtrudeGeometry(roundedRectShape, extrudeSettings);

@@ -1,5 +1,6 @@
-import * as THREE from 'three';
+'use strict';
 
+import * as THREE from 'three';
 import Config from 'appRoot/data/config';
 
 // Main webGL renderer class

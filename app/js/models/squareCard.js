@@ -10,7 +10,6 @@ import base5 from 'appRoot/images/base9.png';
 
 import {
   TweenMax,
-  TimelineMax,
   Linear
 } from "gsap/all";
 
@@ -20,7 +19,18 @@ export default class SquareCard {
 
   constructor(x = 0, y = 0) {
 
-
+    this.windMotion = new TimelineMax({
+      repeat: -1,
+      yoyo: false,
+      repeatDelay: 8 * Math.random()
+    });
+    this.cardsTimeline = new TimelineMax({
+      repeat: 0,
+      delay: 1,
+      repeatDelay: 1
+    });
+    
+    this.mesh = this.createSquareRect(x, y);
   }
 
   createSmallerRect(x = 0, y = 0) {
@@ -38,11 +48,9 @@ export default class SquareCard {
     return meshGroup;
   }
 
-  createRoundedRect(x = 0, y = 0, width = 30, height = 30, radius = 2) {
-    
+  createSquareRect(x = 0, y = 0, width = 30, height = 30) {
 
-    var geometry = new THREE.ExtrudeGeometry(roundedRectShape, extrudeSettings);
-    //var materialCanvas = new THREE.MeshPhongMaterial();
+    var geometry = new THREE.BoxGeometry(width, height, 1);
 
     //=================== CANVAS
     var canvas = document.createElement('canvas');
@@ -59,74 +67,72 @@ export default class SquareCard {
 
 
     baseImage.onload = function () {
-      ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+      // ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-      // var hRatio = canvas.width / baseImage.width;
-      // var vRatio = canvas.height / baseImage.height;
-      // var ratio = Math.min(hRatio, vRatio);
-      // const centerShiftX = (canvas.width - baseImage.width * ratio) / 2;
-      // const centerShiftY = (canvas.height - baseImage.height * ratio) / 2;
-      // ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height,
-      //   centerShiftX, centerShiftY, baseImage.width * ratio, baseImage.height * ratio);
+      var hRatio = canvas.width / baseImage.width;
+      var vRatio = canvas.height / baseImage.height;
+      var ratio = Math.min(hRatio, vRatio);
+      const centerShiftX = (canvas.width - baseImage.width * ratio) / 2;
+      const centerShiftY = (canvas.height - baseImage.height * ratio) / 2;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height,
+        centerShiftX, centerShiftY, baseImage.width * ratio, baseImage.height * ratio);
     }
 
-    //document.body.appendChild(canvas);
+    // document.body.appendChild(canvas);
 
     this.texture = new THREE.CanvasTexture(canvas);
     // this.texture.mapping = THREE.CubeReflectionMapping;
     this.texture.encoding = THREE.sRGBEncoding;
-    this.texture.wrapS = THREE.RepeatWrapping;
-    this.texture.wrapT = THREE.RepeatWrapping;
+    // this.texture.wrapS = THREE.RepeatWrapping;
+    // this.texture.wrapT = THREE.RepeatWrapping;
     // this.texture.repeat.set(0.5, 0.5);
     //this.texture.repeat.set(0.005, 0.01);
-    this.texture.repeat.set(0.005, 0.01);
+    // this.texture.repeat.set(0.005, 0.01);
 
-    // // var loader = new THREE.TextureLoader();
-    // // MATERIAL
     var materialCanvas = new THREE.MeshPhongMaterial({
       shininess: 100,
       //wireframe: true,
       //flatShading: true,
-      // map: this.texture
-    });
-
-    var materialCanvasX = new THREE.MeshPhongMaterial({
-      wireframe: true,
+      map: this.texture
     });
 
     var mesh = new THREE.Mesh(geometry, materialCanvas);
+    mesh.position.set(x, y, 0);
 
+    // ==============================
+    
+    // var center = new THREE.Vector3();
+    // mesh.geometry.computeBoundingBox();
+    // mesh.geometry.boundingBox.getCenter(center);
+    // mesh.geometry.center();
+    // mesh.position.copy(center);
 
-    var center = new THREE.Vector3();
-    mesh.geometry.computeBoundingBox();
-    mesh.geometry.boundingBox.getCenter(center);
-    mesh.geometry.center();
-    mesh.position.copy(center);
+    const windMoveTiming = 1;
 
-    this.windMotion.add(TweenMax.to(mesh.rotation, 0.8, {
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
       y: THREE.Math.degToRad(-8),
       x: THREE.Math.degToRad(-8),
       ease: Linear.easeNone
     }));
-    this.windMotion.add(TweenMax.to(mesh.rotation, 0.8, {
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
       y: THREE.Math.degToRad(0),
       x: THREE.Math.degToRad(0),
       ease: Linear.easeNone
     }));
-    this.windMotion.add(TweenMax.to(mesh.rotation, 0.8, {
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
       y: THREE.Math.degToRad(8),
       x: THREE.Math.degToRad(8),
       ease: Linear.easeNone
     }));
-    this.windMotion.add(TweenMax.to(mesh.rotation, 0.8, {
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
       y: THREE.Math.degToRad(0),
       x: THREE.Math.degToRad(0),
       ease: Linear.easeNone
     }));
 
     // =======
-    // this.cardsTimeline.addLabel("flipout", 3);
+    this.cardsTimeline.addLabel('flipout', 3);
     this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.3, {
       x: THREE.Math.degToRad(180),
       y: THREE.Math.degToRad(180),
@@ -138,7 +144,6 @@ export default class SquareCard {
     //   ease: Linear.easeNone
     // }));
     this.cardsTimeline.stop();
-
 
     return mesh;
   }
