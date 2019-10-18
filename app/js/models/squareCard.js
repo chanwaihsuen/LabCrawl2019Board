@@ -1,19 +1,21 @@
 'use strict';
 
 import * as THREE from 'three';
-import base0 from 'appRoot/images/base.png';
-import base1 from 'appRoot/images/base5.png';
-import base2 from 'appRoot/images/base6.png';
-import base3 from 'appRoot/images/base7.png';
-import base4 from 'appRoot/images/base8.png';
-import base5 from 'appRoot/images/base9.png';
+import base0 from 'appRoot/images/base0.png';
+import base1 from 'appRoot/images/base1.png';
+import base2 from 'appRoot/images/base2.png';
+import base3 from 'appRoot/images/base3.png';
+import base4 from 'appRoot/images/base4.png';
+import base5 from 'appRoot/images/base5.png';
+import base6 from 'appRoot/images/base6.png';
 
 import {
   TweenMax,
   Linear
 } from "gsap/all";
 
-const imageArray = [base0, base1, base2, base3, base4, base5];
+const imageArray = [base0, base1, base2, base3, base4, base5, base6];
+let imageArrayCounter = 0;
 
 export default class SquareCard {
 
@@ -29,17 +31,21 @@ export default class SquareCard {
       delay: 1,
       repeatDelay: 1
     });
-    
-    this.mesh = this.createSquareRect(x, y);
+
+    if (Math.random() > 0.5) {
+      this.mesh = this.createSquareRect(x, y);
+    } else {
+      this.mesh = this.createSmallerRect(x, y);
+    }
   }
 
   createSmallerRect(x = 0, y = 0) {
     var meshGroup = new THREE.Group();
 
-    const smallRectA = this.createRoundedRect(x, y, 14, 14, 2);
-    const smallRectB = this.createRoundedRect(x, y + 16, 14, 14, 2);
-    const smallRectC = this.createRoundedRect(x + 16, y, 14, 14, 2);
-    const smallRectD = this.createRoundedRect(x + 16, y + 16, 14, 14, 2);
+    const smallRectA = this.createSquareRect(x - 8 , y + 8 , 14, 14);
+    const smallRectB = this.createSquareRect(x + 8 , y + 8, 14, 14); 
+    const smallRectC = this.createSquareRect(x - 8, y - 8, 14, 14);
+    const smallRectD = this.createSquareRect(x + 8, y - 8, 14, 14);
 
     meshGroup.add(smallRectA);
     meshGroup.add(smallRectB);
@@ -62,21 +68,28 @@ export default class SquareCard {
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     const baseImage = new Image();
-    baseImage.src = imageArray[Math.floor(Math.random() * 5)];
-    //baseImage.src = imageArray[0];
 
+    //baseImage.src = imageArray[Math.floor(Math.random() * 5)];
+    //baseImage.src = imageArray[0];
+    baseImage.src = imageArray[imageArrayCounter];
+    if (imageArrayCounter < 5) {
+      imageArrayCounter++;
+
+    } else {
+      imageArrayCounter = 0;
+    }
 
     baseImage.onload = function () {
-      // ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-      var hRatio = canvas.width / baseImage.width;
-      var vRatio = canvas.height / baseImage.height;
-      var ratio = Math.min(hRatio, vRatio);
-      const centerShiftX = (canvas.width - baseImage.width * ratio) / 2;
-      const centerShiftY = (canvas.height - baseImage.height * ratio) / 2;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height,
-        centerShiftX, centerShiftY, baseImage.width * ratio, baseImage.height * ratio);
+      // var hRatio = canvas.width / baseImage.width;
+      // var vRatio = canvas.height / baseImage.height;
+      // var ratio = Math.min(hRatio, vRatio);
+      // const centerShiftX = (canvas.width - baseImage.width * ratio) / 2;
+      // const centerShiftY = (canvas.height - baseImage.height * ratio) / 2;
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height,
+      //   centerShiftX, centerShiftY, baseImage.width * ratio, baseImage.height * ratio);
     }
 
     // document.body.appendChild(canvas);
@@ -101,7 +114,7 @@ export default class SquareCard {
     mesh.position.set(x, y, 0);
 
     // ==============================
-    
+
     // var center = new THREE.Vector3();
     // mesh.geometry.computeBoundingBox();
     // mesh.geometry.boundingBox.getCenter(center);

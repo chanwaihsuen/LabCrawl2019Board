@@ -67,29 +67,32 @@ export default class Main {
 
     var groupA = new THREE.Group();
     var groupB = new THREE.Group();
-    let posY = -128;
-    let posX = -15;
 
+    const startX = 0;
+    const startY = -128;
+    const padding = 2;
+
+    let posX = startX;
+    let posY = startY;
+    
     for (let noY = 0; noY < 8; noY++) {
       if (noY === 4) {
-        posY = -128;
+        posY = startY;
       }
-      for (let noX = 0; noX < 4; noX++) {
-
+      for (let noX = 0; noX < 5; noX++) {
         var roundedCard = new SquareCard(posX, posY);
         this.roundedCardArray.push(roundedCard);
-
         if (noY < 4) {
           groupA.add(roundedCard.mesh);
         } else {
           groupB.add(roundedCard.mesh);
         }
 
-        posX += (cardSize + 2)
+        posX += (cardSize + padding)
       }
 
-      posX = -15;
-      posY += -(cardSize + 2);
+      posX = startX;
+      posY += -(cardSize + padding);
     }
 
     this.scene.add(groupA);

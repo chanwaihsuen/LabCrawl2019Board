@@ -1,12 +1,13 @@
 'use strict';
 
 import * as THREE from 'three';
-import base0 from 'appRoot/images/base.png';
-import base1 from 'appRoot/images/base5.png';
-import base2 from 'appRoot/images/base6.png';
-import base3 from 'appRoot/images/base7.png';
-import base4 from 'appRoot/images/base8.png';
-import base5 from 'appRoot/images/base9.png';
+import base0 from 'appRoot/images/base0.png';
+import base1 from 'appRoot/images/base1.png';
+import base2 from 'appRoot/images/base2.png';
+import base3 from 'appRoot/images/base3.png';
+import base4 from 'appRoot/images/base4.png';
+import base5 from 'appRoot/images/base5.png';
+import base6 from 'appRoot/images/base6.png';
 
 import {
   TweenMax,

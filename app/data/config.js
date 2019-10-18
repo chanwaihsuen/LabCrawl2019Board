@@ -41,9 +41,9 @@ export default {
     near: 1,
     far: 1000,
     aspect: 1,
-    posX: 48,
-    posY: -30,
-    posZ: 90
+    posX: 64,
+    posY: -45,
+    posZ: 124
   },
   controls: {
     autoRotate: false,
