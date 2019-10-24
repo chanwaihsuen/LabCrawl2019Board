@@ -37,13 +37,14 @@ export default class SquareCard {
     } else {
       this.mesh = this.createSmallerRect(x, y);
     }
+    //this.mesh = this.createSquareRect(x, y);
   }
 
   createSmallerRect(x = 0, y = 0) {
     var meshGroup = new THREE.Group();
 
-    const smallRectA = this.createSquareRect(x - 8 , y + 8 , 14, 14);
-    const smallRectB = this.createSquareRect(x + 8 , y + 8, 14, 14); 
+    const smallRectA = this.createSquareRect(x - 8, y + 8, 14, 14);
+    const smallRectB = this.createSquareRect(x + 8, y + 8, 14, 14);
     const smallRectC = this.createSquareRect(x - 8, y - 8, 14, 14);
     const smallRectD = this.createSquareRect(x + 8, y - 8, 14, 14);
 
@@ -52,6 +53,26 @@ export default class SquareCard {
     meshGroup.add(smallRectC);
     meshGroup.add(smallRectD);
     return meshGroup;
+  }
+
+  wrapText(context, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(' ');
+    var line = '';
+
+    for (var n = 0; n < words.length; n++) {
+      var testLine = line + words[n] + ' ';
+      var metrics = context.measureText(testLine);
+      var testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        context.fillText(line, x, y);
+        line = words[n] + ' ';
+        y += lineHeight;
+      }
+      else {
+        line = testLine;
+      }
+    }
+    context.fillText(line, x, y);
   }
 
   createSquareRect(x = 0, y = 0, width = 30, height = 30) {
@@ -65,10 +86,21 @@ export default class SquareCard {
     canvas.width = 1024;
     canvas.height = 1024;
 
-    ctx.fillStyle = '#FFFFFF';
+    // ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const baseImage = new Image();
 
+    // var maxWidth = 980;
+    // var lineHeight = 100;
+    // var cX = 60;
+    // var cY = 140;
+    // var text = 'one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty one twenty.';
+    // //var text = 'I want to save the earth by watering my plant less.';
+
+    // ctx.font = '74pt Helvetica';
+    // ctx.fillStyle = '#333';
+    // this.wrapText(ctx, text, cX, cY, maxWidth, lineHeight);
+
+    const baseImage = new Image();
     //baseImage.src = imageArray[Math.floor(Math.random() * 5)];
     //baseImage.src = imageArray[0];
     baseImage.src = imageArray[imageArrayCounter];
@@ -104,7 +136,7 @@ export default class SquareCard {
     // this.texture.repeat.set(0.005, 0.01);
 
     var materialCanvas = new THREE.MeshPhongMaterial({
-      shininess: 100,
+      shininess: 1000,
       //wireframe: true,
       //flatShading: true,
       map: this.texture

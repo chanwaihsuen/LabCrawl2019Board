@@ -1,13 +1,14 @@
 'use strict';
 
 import * as THREE from 'three';
+import { CSS3DRenderer } from 'three-css3drenderer'
 import Config from 'appRoot/data/config';
 
 import {
   TweenMax,
   // TimelineMax,
   Linear
-} from "gsap/all";
+} from 'gsap/all';
 
 import Renderer from 'appRoot/js/components/renderer';
 import Camera from 'appRoot/js/components/camera';
@@ -20,6 +21,7 @@ import DatGUI from 'appRoot/js/managers/datGUI';
 
 import RoundedCard from 'appRoot/js/models/roundedCard';
 import SquareCard from 'appRoot/js/models/squareCard';
+import HtmlElement from 'appRoot/js/models/htmlElement';
 
 export default class Main {
 
@@ -32,6 +34,16 @@ export default class Main {
     // Main scene creation
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000);
+
+    //
+    // this.sceneForHTML = new THREE.Scene();
+    // this.rendererForHTML = new CSS3DRenderer();
+    // let htmlElement = new HtmlElement(this.sceneForHTML, this.rendererForHTML);
+
+    // this.rendererForHTML.setSize(window.innerWidth, window.innerHeight);
+    // this.rendererForHTML.domElement.style.position = 'absolute';
+    // this.rendererForHTML.domElement.style.top = 0;
+    // document.body.appendChild(this.rendererForHTML.domElement);
 
     // Get Device Pixel Ratio first for retina
     if (window.devicePixelRatio) {
@@ -50,8 +62,8 @@ export default class Main {
     lights.forEach((light) => this.light.place(light));
 
     // this.controls = new Controls(this.camera.threeCamera, container);
-    // new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
-    
+    //new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
+
     new DatGUI(this, this.roundedCardArray[0]);
     new Keyboard();
 
@@ -74,7 +86,7 @@ export default class Main {
 
     let posX = startX;
     let posY = startY;
-    
+
     for (let noY = 0; noY < 8; noY++) {
       if (noY === 4) {
         posY = startY;
@@ -98,7 +110,7 @@ export default class Main {
     this.scene.add(groupA);
     this.scene.add(groupB);
 
-    const timingOfMovingUp = 40;
+    const timingOfMovingUp = 80;
 
     TweenMax.to(groupA.position, timingOfMovingUp, {
       y: 256,
@@ -129,17 +141,18 @@ export default class Main {
   }
 
   render() {
+    // this.controls.threeControls.update();
     this.renderer.render(this.scene, this.camera.threeCamera);
+    // this.rendererForHTML.render(this.sceneForHTML, this.camera.threeCamera);
 
-    // texture.needsUpdate = true;
     // Call any vendor or module frame updates here
     // TWEEN.update();
 
     for (let i = 0; i < this.roundedCardArray.length; i++) {
       this.roundedCardArray[i].texturereturn().needsUpdate = true;
     }
-
-    // this.controls.threeControls.update();
+    
+    
     requestAnimationFrame(this.render.bind(this));
   }
 }
