@@ -23,6 +23,8 @@ import RoundedCard from 'appRoot/js/models/roundedCard';
 import SquareCard from 'appRoot/js/models/squareCard';
 import HtmlElement from 'appRoot/js/models/htmlElement';
 
+import GetSocialText from 'appRoot/js/views/GetSocialText.js'
+
 export default class Main {
 
   constructor(container) {
@@ -34,6 +36,7 @@ export default class Main {
     // Main scene creation
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000);
+    this.getSocialText = new GetSocialText();
 
     //
     // this.sceneForHTML = new THREE.Scene();
@@ -151,8 +154,7 @@ export default class Main {
     for (let i = 0; i < this.roundedCardArray.length; i++) {
       this.roundedCardArray[i].texturereturn().needsUpdate = true;
     }
-    
-    
+
     requestAnimationFrame(this.render.bind(this));
   }
 }

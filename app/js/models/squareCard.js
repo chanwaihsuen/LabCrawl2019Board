@@ -17,9 +17,31 @@ import {
 const imageArray = [base0, base1, base2, base3, base4, base5, base6];
 let imageArrayCounter = 0;
 
+const maxWidth = 980;
+const lineHeight = 100;
+const cX = 60;
+const cY = 140;
+
+const testString = 'one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty one twenty.';
+let testCounter = 0;
+
 export default class SquareCard {
 
   constructor(x = 0, y = 0) {
+
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.canvas.width = 1024;
+    this.canvas.height = 1024;
+    this.text = testString;
+
+    // var _this = this;
+    // setInterval(() => {
+    //   console.log('fired');
+    //   _this.text = 'testing' + testCounter;
+    //   testCounter++;
+    //   _this.wrapText(_this.ctx, _this.text, cX, cY, maxWidth, lineHeight);
+    // }, 1000);
 
     this.windMotion = new TimelineMax({
       repeat: -1,
@@ -56,6 +78,11 @@ export default class SquareCard {
   }
 
   wrapText(context, text, x, y, maxWidth, lineHeight) {
+    this.ctx.fillStyle = '#FFFFFF';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.font = '74pt Helvetica';
+    this.ctx.fillStyle = '#333';
+
     var words = text.split(' ');
     var line = '';
 
@@ -75,58 +102,45 @@ export default class SquareCard {
     context.fillText(line, x, y);
   }
 
+  putTileImage() {
+    // const baseImage = new Image();
+    // //baseImage.src = imageArray[Math.floor(Math.random() * 5)];
+    // //baseImage.src = imageArray[0];
+    // baseImage.src = imageArray[imageArrayCounter];
+    // if (imageArrayCounter < 5) {
+    //   imageArrayCounter++;
+
+    // } else {
+    //   imageArrayCounter = 0;
+    // }
+
+    // baseImage.onload = function () {
+    //   ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+
+    //   // var hRatio = canvas.width / baseImage.width;
+    //   // var vRatio = canvas.height / baseImage.height;
+    //   // var ratio = Math.min(hRatio, vRatio);
+    //   // const centerShiftX = (canvas.width - baseImage.width * ratio) / 2;
+    //   // const centerShiftY = (canvas.height - baseImage.height * ratio) / 2;
+    //   // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //   // ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height,
+    //   //   centerShiftX, centerShiftY, baseImage.width * ratio, baseImage.height * ratio);
+    // }
+
+    // document.body.appendChild(canvas);
+  }
+
+  updateMyTextureWithNewInformation(theTextToUpdate) {
+    this.wrapText(this.ctx, theTextToUpdate, cX, cY, maxWidth, lineHeight);
+  }
+
   createSquareRect(x = 0, y = 0, width = 30, height = 30) {
+
+    this.wrapText(this.ctx, this.text, cX, cY, maxWidth, lineHeight);
 
     var geometry = new THREE.BoxGeometry(width, height, 1);
 
-    //=================== CANVAS
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-
-    canvas.width = 1024;
-    canvas.height = 1024;
-
-    // ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // var maxWidth = 980;
-    // var lineHeight = 100;
-    // var cX = 60;
-    // var cY = 140;
-    // var text = 'one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty one twenty.';
-    // //var text = 'I want to save the earth by watering my plant less.';
-
-    // ctx.font = '74pt Helvetica';
-    // ctx.fillStyle = '#333';
-    // this.wrapText(ctx, text, cX, cY, maxWidth, lineHeight);
-
-    const baseImage = new Image();
-    //baseImage.src = imageArray[Math.floor(Math.random() * 5)];
-    //baseImage.src = imageArray[0];
-    baseImage.src = imageArray[imageArrayCounter];
-    if (imageArrayCounter < 5) {
-      imageArrayCounter++;
-
-    } else {
-      imageArrayCounter = 0;
-    }
-
-    baseImage.onload = function () {
-      ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
-
-      // var hRatio = canvas.width / baseImage.width;
-      // var vRatio = canvas.height / baseImage.height;
-      // var ratio = Math.min(hRatio, vRatio);
-      // const centerShiftX = (canvas.width - baseImage.width * ratio) / 2;
-      // const centerShiftY = (canvas.height - baseImage.height * ratio) / 2;
-      // ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height,
-      //   centerShiftX, centerShiftY, baseImage.width * ratio, baseImage.height * ratio);
-    }
-
-    // document.body.appendChild(canvas);
-
-    this.texture = new THREE.CanvasTexture(canvas);
+    this.texture = new THREE.CanvasTexture(this.canvas);
     // this.texture.mapping = THREE.CubeReflectionMapping;
     this.texture.encoding = THREE.sRGBEncoding;
     // this.texture.wrapS = THREE.RepeatWrapping;
@@ -136,7 +150,7 @@ export default class SquareCard {
     // this.texture.repeat.set(0.005, 0.01);
 
     var materialCanvas = new THREE.MeshPhongMaterial({
-      shininess: 1000,
+      shininess: 100,
       //wireframe: true,
       //flatShading: true,
       map: this.texture
@@ -147,48 +161,48 @@ export default class SquareCard {
 
     // ==============================
 
-    // var center = new THREE.Vector3();
-    // mesh.geometry.computeBoundingBox();
-    // mesh.geometry.boundingBox.getCenter(center);
-    // mesh.geometry.center();
-    // mesh.position.copy(center);
+    // // var center = new THREE.Vector3();
+    // // mesh.geometry.computeBoundingBox();
+    // // mesh.geometry.boundingBox.getCenter(center);
+    // // mesh.geometry.center();
+    // // mesh.position.copy(center);
 
-    const windMoveTiming = 1;
+    // const windMoveTiming = 1;
 
-    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-      y: THREE.Math.degToRad(-8),
-      x: THREE.Math.degToRad(-8),
-      ease: Linear.easeNone
-    }));
-    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-      y: THREE.Math.degToRad(0),
-      x: THREE.Math.degToRad(0),
-      ease: Linear.easeNone
-    }));
-    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-      y: THREE.Math.degToRad(8),
-      x: THREE.Math.degToRad(8),
-      ease: Linear.easeNone
-    }));
-    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-      y: THREE.Math.degToRad(0),
-      x: THREE.Math.degToRad(0),
-      ease: Linear.easeNone
-    }));
+    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+    //   y: THREE.Math.degToRad(-8),
+    //   x: THREE.Math.degToRad(-8),
+    //   ease: Linear.easeNone
+    // }));
+    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+    //   y: THREE.Math.degToRad(0),
+    //   x: THREE.Math.degToRad(0),
+    //   ease: Linear.easeNone
+    // }));
+    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+    //   y: THREE.Math.degToRad(8),
+    //   x: THREE.Math.degToRad(8),
+    //   ease: Linear.easeNone
+    // }));
+    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+    //   y: THREE.Math.degToRad(0),
+    //   x: THREE.Math.degToRad(0),
+    //   ease: Linear.easeNone
+    // }));
 
-    // =======
-    this.cardsTimeline.addLabel('flipout', 3);
-    this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.3, {
-      x: THREE.Math.degToRad(180),
-      y: THREE.Math.degToRad(180),
-      ease: Linear.easeNone
-    }));
-    // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.8, {
+    // // =======
+    // this.cardsTimeline.addLabel('flipout', 3);
+    // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.3, {
     //   x: THREE.Math.degToRad(180),
     //   y: THREE.Math.degToRad(180),
     //   ease: Linear.easeNone
     // }));
-    this.cardsTimeline.stop();
+    // // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.8, {
+    // //   x: THREE.Math.degToRad(180),
+    // //   y: THREE.Math.degToRad(180),
+    // //   ease: Linear.easeNone
+    // // }));
+    // this.cardsTimeline.stop();
 
     return mesh;
   }
