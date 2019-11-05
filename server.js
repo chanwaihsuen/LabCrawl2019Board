@@ -97,7 +97,7 @@ app.get('/getData', cors(corsOptions), function (req, res) {
 });
 
 function saveToFile(rows, callback) {
-  fs.writeFile('labcrawlResponse.json', JSON.stringify(rows), callback);
+  fs.writeFile('./app/labcrawlResponse.json', JSON.stringify(rows), callback);
 }
 
 // ==================================== HELPER FUNCTIONS ====================================

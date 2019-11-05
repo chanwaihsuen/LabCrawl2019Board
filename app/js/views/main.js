@@ -28,7 +28,7 @@ import GetSocialText from 'appRoot/js/views/GetSocialText.js'
 export default class Main {
 
   constructor(container) {
-    this.roundedCardArray = [];
+    this.cardsArray = [];
 
     // Set container property to container element
     this.container = container;
@@ -64,10 +64,10 @@ export default class Main {
     const lights = ['ambient', 'directional', 'point', 'hemi'];
     lights.forEach((light) => this.light.place(light));
 
-    // this.controls = new Controls(this.camera.threeCamera, container);
-    //new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
+    this.controls = new Controls(this.camera.threeCamera, container);
+    new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
 
-    new DatGUI(this, this.roundedCardArray[0]);
+    new DatGUI(this, this.cardsArray[0]);
     new Keyboard();
 
     // CREATE DECK
@@ -84,23 +84,25 @@ export default class Main {
     var groupB = new THREE.Group();
 
     const startX = 0;
-    const startY = -128;
+    // const startY = -128;
+    const startY = 0;
     const padding = 2;
 
     let posX = startX;
     let posY = startY;
 
     for (let noY = 0; noY < 8; noY++) {
-      if (noY === 4) {
-        posY = startY;
-      }
+      // if (noY === 4) {
+      //   posY = startY;
+      // }
       for (let noX = 0; noX < 5; noX++) {
-        var roundedCard = new SquareCard(posX, posY);
-        this.roundedCardArray.push(roundedCard);
+        var singleCard = new SquareCard(posX, posY);
+        this.cardsArray.push(singleCard);
+
         if (noY < 4) {
-          groupA.add(roundedCard.mesh);
+          groupA.add(singleCard.mesh);
         } else {
-          groupB.add(roundedCard.mesh);
+          groupB.add(singleCard.mesh);
         }
 
         posX += (cardSize + padding)
@@ -113,46 +115,51 @@ export default class Main {
     this.scene.add(groupA);
     this.scene.add(groupB);
 
-    const timingOfMovingUp = 80;
+    // const timingOfMovingUp = 80;
 
-    TweenMax.to(groupA.position, timingOfMovingUp, {
-      y: 256,
-      repeat: -1,
-      ease: Linear.easeNone
-    });
-    TweenMax.to(groupB.position, timingOfMovingUp, {
-      y: 256,
-      delay: timingOfMovingUp / 2,
-      repeat: -1,
-      ease: Linear.easeNone
-    });
+    // TweenMax.to(groupA.position, timingOfMovingUp, {
+    //   y: 256,
+    //   repeat: -1,
+    //   ease: Linear.easeNone
+    // });
+    // TweenMax.to(groupB.position, timingOfMovingUp, {
+    //   y: 256,
+    //   delay: timingOfMovingUp / 2,
+    //   repeat: -1,
+    //   ease: Linear.easeNone
+    // });
+
+    this.getSocialText.cardsArray = this.cardsArray;
+    
 
     document.addEventListener('keydown', (event) => {
       const keyCode = event.code;
       // console.log('keyCode', keyCode);
       if (keyCode === 'KeyS') {
-        for (let i = 0; i < this.roundedCardArray.length; i++) {
-          this.roundedCardArray[i].stopWindMotionAndFlipOut();
+        for (let i = 0; i < this.cardsArray.length; i++) {
+          this.cardsArray[i].stopWindMotionAndFlipOut();
         }
       }
       if (keyCode === 'KeyX') {
-        for (let i = 0; i < this.roundedCardArray.length; i++) {
-          this.roundedCardArray[i].returnToWind();
+        for (let i = 0; i < this.cardsArray.length; i++) {
+          this.cardsArray[i].returnToWind();
         }
       }
     }, false)
   }
 
   render() {
-    // this.controls.threeControls.update();
+    this.controls.threeControls.update();
     this.renderer.render(this.scene, this.camera.threeCamera);
     // this.rendererForHTML.render(this.sceneForHTML, this.camera.threeCamera);
 
     // Call any vendor or module frame updates here
     // TWEEN.update();
 
-    for (let i = 0; i < this.roundedCardArray.length; i++) {
-      this.roundedCardArray[i].texturereturn().needsUpdate = true;
+    for (let i = 0; i < this.cardsArray.length; i++) {
+      if (this.cardsArray[i].selfSize === 'BIG') {
+        this.cardsArray[i].texturereturn().needsUpdate = true;
+      }
     }
 
     requestAnimationFrame(this.render.bind(this));

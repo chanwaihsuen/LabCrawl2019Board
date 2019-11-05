@@ -14,6 +14,9 @@ import {
   Linear
 } from "gsap/all";
 
+var loader = new THREE.CubeTextureLoader();
+loader.setPath('./images/');
+
 const imageArray = [base0, base1, base2, base3, base4, base5, base6];
 let imageArrayCounter = 0;
 
@@ -28,20 +31,10 @@ let testCounter = 0;
 export default class SquareCard {
 
   constructor(x = 0, y = 0) {
-
-    this.canvas = document.createElement('canvas');
-    this.ctx = this.canvas.getContext('2d');
-    this.canvas.width = 1024;
-    this.canvas.height = 1024;
     this.text = testString;
-
-    // var _this = this;
-    // setInterval(() => {
-    //   console.log('fired');
-    //   _this.text = 'testing' + testCounter;
-    //   testCounter++;
-    //   _this.wrapText(_this.ctx, _this.text, cX, cY, maxWidth, lineHeight);
-    // }, 1000);
+    this.selfSize = '';
+    this.canvasArray = [];
+    this.ctxArray = [];
 
     this.windMotion = new TimelineMax({
       repeat: -1,
@@ -56,10 +49,11 @@ export default class SquareCard {
 
     if (Math.random() > 0.5) {
       this.mesh = this.createSquareRect(x, y);
+      this.selfSize = 'BIG';
     } else {
       this.mesh = this.createSmallerRect(x, y);
+      this.selfSize = 'SMALL';
     }
-    //this.mesh = this.createSquareRect(x, y);
   }
 
   createSmallerRect(x = 0, y = 0) {
@@ -74,24 +68,25 @@ export default class SquareCard {
     meshGroup.add(smallRectB);
     meshGroup.add(smallRectC);
     meshGroup.add(smallRectD);
+
     return meshGroup;
   }
 
-  wrapText(context, text, x, y, maxWidth, lineHeight) {
-    this.ctx.fillStyle = '#FFFFFF';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.font = '74pt Helvetica';
-    this.ctx.fillStyle = '#333';
+  putTextonCanvas(canvas, ctx, text, x, y, maxWidth, lineHeight) {
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '74pt Helvetica';
+    ctx.fillStyle = '#FFFFFF';
 
-    var words = text.split(' ');
-    var line = '';
+    let words = text.split(' ');
+    let line = '';
 
     for (var n = 0; n < words.length; n++) {
       var testLine = line + words[n] + ' ';
-      var metrics = context.measureText(testLine);
+      var metrics = ctx.measureText(testLine);
       var testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
-        context.fillText(line, x, y);
+        ctx.fillText(line, x, y);
         line = words[n] + ' ';
         y += lineHeight;
       }
@@ -99,20 +94,19 @@ export default class SquareCard {
         line = testLine;
       }
     }
-    context.fillText(line, x, y);
+    ctx.fillText(line, x, y);
   }
 
-  putTileImage() {
+  putImageonCanvas(canvas, ctx) {
     // const baseImage = new Image();
     // //baseImage.src = imageArray[Math.floor(Math.random() * 5)];
     // //baseImage.src = imageArray[0];
-    // baseImage.src = imageArray[imageArrayCounter];
-    // if (imageArrayCounter < 5) {
-    //   imageArrayCounter++;
-
-    // } else {
-    //   imageArrayCounter = 0;
-    // }
+    // baseImage.src = imageArray[0];
+    // // if (imageArrayCounter < 5) {
+    // //   imageArrayCounter++;
+    // // } else {
+    // //   imageArrayCounter = 0;
+    // // }
 
     // baseImage.onload = function () {
     //   ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
@@ -126,83 +120,106 @@ export default class SquareCard {
     //   // ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height,
     //   //   centerShiftX, centerShiftY, baseImage.width * ratio, baseImage.height * ratio);
     // }
-
-    // document.body.appendChild(canvas);
   }
 
   updateMyTextureWithNewInformation(theTextToUpdate) {
-    this.wrapText(this.ctx, theTextToUpdate, cX, cY, maxWidth, lineHeight);
+    if (this.selfSize == 'BIG') {
+      this.putTextonCanvas(this.canvasArray[0], this.ctxArray[0], theTextToUpdate, cX, cY, maxWidth, lineHeight);
+    }
   }
 
   createSquareRect(x = 0, y = 0, width = 30, height = 30) {
-
-    this.wrapText(this.ctx, this.text, cX, cY, maxWidth, lineHeight);
-
     var geometry = new THREE.BoxGeometry(width, height, 1);
+    var mesh;
 
-    this.texture = new THREE.CanvasTexture(this.canvas);
-    // this.texture.mapping = THREE.CubeReflectionMapping;
-    this.texture.encoding = THREE.sRGBEncoding;
-    // this.texture.wrapS = THREE.RepeatWrapping;
-    // this.texture.wrapT = THREE.RepeatWrapping;
-    // this.texture.repeat.set(0.5, 0.5);
-    //this.texture.repeat.set(0.005, 0.01);
-    // this.texture.repeat.set(0.005, 0.01);
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
 
-    var materialCanvas = new THREE.MeshPhongMaterial({
-      shininess: 100,
-      //wireframe: true,
-      //flatShading: true,
-      map: this.texture
-    });
+    canvas.width = 1024;
+    canvas.height = 1024;
 
-    var mesh = new THREE.Mesh(geometry, materialCanvas);
+    this.canvasArray.push(canvas);
+    this.ctxArray.push(ctx);
+
+    if (width > 20) {
+      // BIG
+      this.texture = new THREE.CanvasTexture(canvas);
+      this.texture.encoding = THREE.sRGBEncoding;
+      this.putTextonCanvas(canvas, ctx, this.text, cX, cY, maxWidth, lineHeight);
+
+      var materialCanvas = new THREE.MeshPhongMaterial({
+        shininess: 100,
+        //wireframe: true,
+        //flatShading: true,
+        map: this.texture
+      });
+      mesh = new THREE.Mesh(geometry, materialCanvas);
+
+    } else {
+      // SMALL
+      var texture = new THREE.TextureLoader().load(imageArray[imageArrayCounter]);
+      if (imageArrayCounter < 5) {
+        imageArrayCounter++;
+      } else {
+        imageArrayCounter = 0;
+      }
+
+      const materialFlat = new THREE.MeshBasicMaterial({
+        map: texture
+      });
+
+      // let materialFlat = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
+      mesh = new THREE.Mesh(geometry, materialFlat);
+      mesh.material.needsUpdate = true;
+      //this.putImageonCanvas(canvas, ctx);
+    }
+
     mesh.position.set(x, y, 0);
 
     // ==============================
 
-    // // var center = new THREE.Vector3();
-    // // mesh.geometry.computeBoundingBox();
-    // // mesh.geometry.boundingBox.getCenter(center);
-    // // mesh.geometry.center();
-    // // mesh.position.copy(center);
+    // var center = new THREE.Vector3();
+    // mesh.geometry.computeBoundingBox();
+    // mesh.geometry.boundingBox.getCenter(center);
+    // mesh.geometry.center();
+    // mesh.position.copy(center);
 
-    // const windMoveTiming = 1;
+    const windMoveTiming = 1;
 
-    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-    //   y: THREE.Math.degToRad(-8),
-    //   x: THREE.Math.degToRad(-8),
-    //   ease: Linear.easeNone
-    // }));
-    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-    //   y: THREE.Math.degToRad(0),
-    //   x: THREE.Math.degToRad(0),
-    //   ease: Linear.easeNone
-    // }));
-    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-    //   y: THREE.Math.degToRad(8),
-    //   x: THREE.Math.degToRad(8),
-    //   ease: Linear.easeNone
-    // }));
-    // this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
-    //   y: THREE.Math.degToRad(0),
-    //   x: THREE.Math.degToRad(0),
-    //   ease: Linear.easeNone
-    // }));
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+      y: THREE.Math.degToRad(-8),
+      x: THREE.Math.degToRad(-8),
+      ease: Linear.easeNone
+    }));
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+      y: THREE.Math.degToRad(0),
+      x: THREE.Math.degToRad(0),
+      ease: Linear.easeNone
+    }));
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+      y: THREE.Math.degToRad(8),
+      x: THREE.Math.degToRad(8),
+      ease: Linear.easeNone
+    }));
+    this.windMotion.add(TweenMax.to(mesh.rotation, windMoveTiming, {
+      y: THREE.Math.degToRad(0),
+      x: THREE.Math.degToRad(0),
+      ease: Linear.easeNone
+    }));
 
-    // // =======
-    // this.cardsTimeline.addLabel('flipout', 3);
-    // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.3, {
+    // =======
+    this.cardsTimeline.addLabel('flipout', 3);
+    this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.3, {
+      x: THREE.Math.degToRad(180),
+      y: THREE.Math.degToRad(180),
+      ease: Linear.easeNone
+    }));
+    // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.8, {
     //   x: THREE.Math.degToRad(180),
     //   y: THREE.Math.degToRad(180),
     //   ease: Linear.easeNone
     // }));
-    // // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.8, {
-    // //   x: THREE.Math.degToRad(180),
-    // //   y: THREE.Math.degToRad(180),
-    // //   ease: Linear.easeNone
-    // // }));
-    // this.cardsTimeline.stop();
+    this.cardsTimeline.stop();
 
     return mesh;
   }
