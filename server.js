@@ -1,33 +1,107 @@
 const express = require('express');
-const app = express();
-const port = process.env.PORT || 80;
+var bodyParser = require('body-parser');
 var path = require('path');
-var multer = require('multer')
 var cors = require('cors');
 const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
-
-// If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
+//
+const app = express();
+const port = process.env.PORT || 3000;
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
+const spreadsheetId = '1wJVMlFEZZS8RSdASzN-Wp6hwtKCsPTZDcuap9txS5Ac';
 
-// Load client secrets from a local file.
-fs.readFile('credentials.json', (err, content) => {
-  if (err) return console.log('Error loading client secret file:', err);
-  // Authorize a client with credentials, then call the Google Sheets API.
-  authorize(JSON.parse(content), listMajors);
+// Serve the files on port
+const server = app.listen(port, function () {
+  console.log(`We started a server at port ${server.address().port} \n`);
+});
+var corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200,
+}
+app.use(express.static(path.join(__dirname, 'app')));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/', cors(corsOptions), function (req, res) {
+  res.sendFile(__dirname + '/app/index.html');
+});
+app.get('/test', cors(corsOptions), function (req, res) {
+  res.status(200).send('connected');
 });
 
-/**
- * Create an OAuth2 client with the given credentials, and then execute the
- * given callback function.
- * @param {Object} credentials The authorization client credentials.
- * @param {function} callback The callback to call with the authorized client.
- */
+
+// ==================================== API TO GET DATA ====================================
+// app.set('view engine, 'ejs);
+
+app.get('/getData', cors(corsOptions), function (req, res) {
+
+  // Authorization
+  fs.readFile('credentials.json', (err, content) => {
+    if (err) return console.log('Error loading client secret file:', err);
+    // Authorize a client with credentials, then call the Google Sheets API.
+    authorize(JSON.parse(content), datapull);
+  });
+
+  // Callback function pulling data
+  function datapull(auth) {
+    const sheets = google.sheets({ version: 'v4', auth });
+    var result = sheets.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: 'LabcrawlResponse!A2:E',
+    }, (err, response) => {
+      if (err) return console.log('The API returned an error: ' + err);
+
+      const rows = response.data.values;
+
+      var responseArray = [];
+      for (index in rows) {
+        var responseObj = {};
+        responseObj.created = rows[index][0];
+        var date = new Date(rows[index][0]);
+        responseObj.createdDate = date.getDate();
+        responseObj.createdTime = date.getTime();
+        responseObj.question = rows[index][1];
+
+        switch (rows[index].length) {
+          case 3:
+            responseObj.questionType = 0;
+            responseObj.answer = rows[index][2].trim();
+            break;
+          case 4:
+            responseObj.questionType = 1;
+            responseObj.answer = rows[index][3].trim();
+            break;
+          case 5:
+            responseObj.questionType = 2;
+            responseObj.answer = rows[index][4].trim();
+            break;
+        }
+        responseArray.push(responseObj);
+      }
+
+      saveToFile(responseArray, function (err) {
+        if (err) {
+          res.status(500);
+          throw new Error('JSON NOT SAVED')
+        }
+        res.status(200).send('JSON SAVED');
+      });
+
+      // res.status(200).send(JSON.stringify(responseArray));
+    });
+  }
+
+});
+
+function saveToFile(rows, callback) {
+  fs.writeFile('./app/labcrawlResponse.json', JSON.stringify(rows), callback);
+}
+
+// ==================================== HELPER FUNCTIONS ====================================
+
 function authorize(credentials, callback) {
   const { client_secret, client_id, redirect_uris } = credentials.installed;
   const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
@@ -40,12 +114,6 @@ function authorize(credentials, callback) {
   });
 }
 
-/**
- * Get and store new token after prompting for user authorization, and then
- * execute the given callback with the authorized OAuth2 client.
- * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
- * @param {getEventsCallback} callback The callback for the authorized client.
- */
 function getNewToken(oAuth2Client, callback) {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
@@ -70,115 +138,3 @@ function getNewToken(oAuth2Client, callback) {
     });
   });
 }
-
-/**
- * Prints the names and majors of students in a sample spreadsheet:
- * @see https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
- * @param {google.auth.OAuth2} auth The authenticated Google OAuth client.
- */
-function listMajors(auth) {
-  const sheets = google.sheets({ version: 'v4', auth });
-  sheets.spreadsheets.values.get({
-    spreadsheetId: '1ikLoqiY86gjO33VG3oTTiW3VE-64c2U9ZZIIJzW0nPg',
-    range: 'Labcrawl!C1:C',
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const rows = res.data.values;
-    if (rows.length) {
-      // Print columns A and E, which correspond to indices 0 and 4.
-      rows.map((row) => {
-        console.log(`${row[0]}`);
-      });
-    } else {
-      console.log('No data found.');
-    }
-  });
-}
-
-var corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200,
-}
-
-app.use(cors());
-
-// static assets
-// app.use(express.static('dist'));
-// Serve the static files from the React app
-// //app.use(express.static(path.join(__dirname, 'dist')));
-// Handles any requests that don't match the ones above
-// app.get('*', (req,res) =>{
-//     res.sendFile(path.join(__dirname+'/dist/index.html'));
-// });
-// app.get('*', cors(corsOptions), (req, res) => {
-//     res.sendFile(path.join(__dirname + '/dist/index.html'));
-// });
-
-app.get('/getData', cors(corsOptions), function (req, res) {
-  // const { client_secret, client_id, redirect_uris } = credentials.installed;
-  // const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-  // fs.readFile(TOKEN_PATH, (err, token) => {
-  //   if (err) return getNewToken(oAuth2Client, callback);
-  //   oAuth2Client.setCredentials(JSON.parse(token));
-  //   datapull(oAuth2Client);
-  // });
-
-  fs.readFile('credentials.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-    // Authorize a client with credentials, then call the Google Sheets API.
-    authorize(JSON.parse(content), datapull);
-  });
-
-  // Callback function pulling data
-  function datapull(auth) {
-    const sheets = google.sheets({ version: 'v4', auth });
-    sheets.spreadsheets.values.get({
-      spreadsheetId: '1ikLoqiY86gjO33VG3oTTiW3VE-64c2U9ZZIIJzW0nPg',
-      range: 'Labcrawl!C1:C',
-    }, (err, res) => {
-      if (err) return console.log('The API returned an error: ' + err);
-      const rows = res.data.values;
-      if (rows.length) {
-        // Print columns A and E, which correspond to indices 0 and 4.
-        rows.map((row) => {
-          console.log(`${row[0]}`);
-        });
-      } else {
-        console.log('No data found.');
-      }
-    });
-  }
-});
-
-
-
-// Serve the files on port 3000.
-app.listen(port, function () {
-  console.log('Running\n');
-});
-
-// var storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, './dist')
-//     },
-//     filename: function (req, file, cb) {
-//         //cb(null, Date.now() + '-' + file.originalname)
-//         cb(null, file.originalname)
-//         //cb(null, 'exported_individual.json')
-//     }
-// })
-// var upload = multer({ storage: storage }).single('file');
-
-// app.post('/upload', cors(corsOptions), function (req, res) {
-
-//     upload(req, res, function (err) {
-//         if (err instanceof multer.MulterError) {
-//             return res.status(500).json(err)
-//         } else if (err) {
-//             return res.status(500).json(err)
-//         }
-//         return res.status(200).send(req.file)
-
-//     })
-
-// });
