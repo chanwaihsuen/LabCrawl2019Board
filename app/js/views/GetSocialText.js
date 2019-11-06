@@ -4,17 +4,28 @@ import axios from 'axios'
 export default class GetSocialText {
     constructor() {
         this.cardsArray = [];
-        this.data;
+        this.submittedData;
         this.counter = 0;
+        this.lastDataLength = 0;
+        this.getNewData();
+    }
 
+    getNewData() {
+        console.log('getNewData');
         let _this = this;
 
         axios.get('http://localhost:9006/labcrawlResponse.json')
             .then(function (response) {
                 // handle success
-                console.log(response);
-                _this.data = response;
-                _this.changeText();
+                console.log(response.data);
+                
+                if (_this.lastDataLength >= response.data.length) {
+                    console.log('NO CHANGE IN DATA');
+                } else {
+                    console.log('NEW DATA ADDED');
+                    _this.submittedData = response.data.reverse();
+                }
+                _this.lastDataLength = response.data.length;
             })
             .catch(function (error) {
                 // handle error
@@ -23,29 +34,25 @@ export default class GetSocialText {
             .finally(function () {
                 // always executed
             });
+
+        // setTimeout(() => {
+        //     console.log('SET TIMEOUT');
+        //     _this.getNewData();
+        // }, 5000);
     }
 
     changeText(whichGroup) {
         let _this = this;
         for (let i = 0; i < whichGroup.length; i++) {
-            whichGroup[i].updateMyTextureWithNewInformation(_this.data.data[_this.counter].answer);
-            if (_this.counter >= this.data.data.length-1) {
+            console.log('_this.counter', _this.counter);
+            whichGroup[i].updateMyTextureWithNewInformation(_this.submittedData[_this.counter].answer);
+            if (_this.counter >= this.submittedData.length - 1) {
                 _this.counter = 0;
+                _this.getNewData();
             } else {
                 _this.counter++;
             }
         }
-
-        // setInterval(() => {
-        //     for (let i = 0; i < _this.cardsArray.length; i++) {
-        //         _this.cardsArray[i].updateMyTextureWithNewInformation(_this.data.data[_this.counter].answer);
-        //     }
-        //     if (_this.counter >= this.data.data.length-1) {
-        //         _this.counter = 0;
-        //     } else {
-        //         _this.counter++;
-        //     }
-        // }, 1000);
     }
-    
+
 }

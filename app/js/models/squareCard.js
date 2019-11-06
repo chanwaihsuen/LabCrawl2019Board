@@ -63,7 +63,7 @@ export default class SquareCard {
     this.windMotion = new TimelineMax({
       repeat: -1,
       yoyo: false,
-      repeatDelay: 8 * Math.random(),
+      repeatDelay: 8 * Math.random() + 3,
       onRepeat: function () {
         // console.log('callback');
       }
@@ -187,8 +187,7 @@ export default class SquareCard {
         imageArrayCounter++;
       }
 
-      const materialFlat = new THREE.MeshPhongMaterial({
-        shininess: 10,
+      const materialFlat = new THREE.MeshBasicMaterial({
         map: imageTexture
       });
 

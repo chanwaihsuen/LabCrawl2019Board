@@ -133,7 +133,7 @@ export default class Main {
     this.scene.add(groupB);
     this.getSocialText.allCardsArray = this.allCardsArray;
 
-    const timingOfMovingUp = 20; //80;
+    const timingOfMovingUp = 10; //80;
     const amtToMove = (noOfVerticalTiles * cardSize) + (noOfVerticalTiles * padding)
 
     TweenMax.to(groupA.position, timingOfMovingUp, {
@@ -169,7 +169,42 @@ export default class Main {
           this.allCardsArray[i].returnToWind();
         }
       }
+      if (keyCode === 'KeyF') {
+        this.openFullscreen();
+      }
     }, false)
+  }
+
+  /* View in fullscreen */
+  openFullscreen() {
+    /* Get the documentElement (<html>) to display the page in fullscreen */
+    var elem = document.documentElement;
+
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+      elem.msRequestFullscreen();
+    }
+  }
+
+  /* Close fullscreen */
+  closeFullscreen() {
+    /* Get the documentElement (<html>) to display the page in fullscreen */
+    var elem = document.documentElement;
+
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { /* Firefox */
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE/Edge */
+      document.msExitFullscreen();
+    }
   }
 
   render() {
