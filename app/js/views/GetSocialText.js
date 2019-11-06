@@ -7,7 +7,29 @@ export default class GetSocialText {
         this.submittedData;
         this.counter = 0;
         this.lastDataLength = 0;
+        // this.refreshJson();
         this.getNewData();
+    }
+
+    refreshJson() {
+        console.log('refreshJson');
+        let _this = this;
+
+        // axios.get('http://localhost:3000/getData')
+        //     .then(function (response) {
+        //         // handle success
+        //     })
+        //     .catch(function (error) {
+        //         // handle error
+        //         console.log(error);
+        //     })
+        //     .finally(function () {
+        //         // always executed
+        //         setTimeout(() => {
+        //             console.log('refreshJson SETTIMEOUT');
+        //             _this.refreshJson();
+        //         }, 100 * 1000);
+        //     });
     }
 
     getNewData() {
@@ -18,7 +40,7 @@ export default class GetSocialText {
             .then(function (response) {
                 // handle success
                 console.log(response.data);
-                
+
                 if (_this.lastDataLength >= response.data.length) {
                     console.log('NO CHANGE IN DATA');
                 } else {
@@ -44,7 +66,7 @@ export default class GetSocialText {
     changeText(whichGroup) {
         let _this = this;
         for (let i = 0; i < whichGroup.length; i++) {
-            console.log('_this.counter', _this.counter);
+            // console.log('_this.counter', _this.counter);
             whichGroup[i].updateMyTextureWithNewInformation(_this.submittedData[_this.counter].answer);
             if (_this.counter >= this.submittedData.length - 1) {
                 _this.counter = 0;

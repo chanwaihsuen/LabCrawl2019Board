@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
-const spreadsheetId = '1wJVMlFEZZS8RSdASzN-Wp6hwtKCsPTZDcuap9txS5Ac';
+const spreadsheetId = '168mpLILWGBmWJiqXbtla1qlex59E6Cvnpjyst6c9U1c';
 
 // Serve the files on port
 const server = app.listen(port, function () {
@@ -99,6 +99,31 @@ app.get('/getData', cors(corsOptions), function (req, res) {
 function saveToFile(rows, callback) {
   fs.writeFile('./app/labcrawlResponse.json', JSON.stringify(rows), callback);
 }
+
+// ==================================== STARTING FUNCTIONS ====================================
+
+// Load client secrets from a local file.
+// fs.readFile('credentials.json', (err, content) => {
+//   if (err) return console.log('Error loading client secret file:', err);
+//   // Authorize a client with credentials, then call the Google Sheets API.
+//   authorize(JSON.parse(content), listMajors);
+// });
+
+// function listMajors(auth) {
+//   const sheets = google.sheets({version: 'v4', auth});
+//   sheets.spreadsheets.values.get({
+//     spreadsheetId: spreadsheetId,
+//     range: 'LabcrawlResponse!A2:E',
+//   }, (err, res) => {
+//     if (err) return console.log('The API returned an error: ' + err);
+//     const rows = res.data.values;
+//     if (rows.length) {
+//       console.log('OK:');
+//     } else {
+//       console.log('No data found.');
+//     }
+//   });
+// }
 
 // ==================================== HELPER FUNCTIONS ====================================
 
