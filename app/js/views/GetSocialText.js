@@ -25,21 +25,27 @@ export default class GetSocialText {
             });
     }
 
-    changeText() {
+    changeText(whichGroup) {
         let _this = this;
-
-        setInterval(() => {
-            console.log('interval fired');
-
-            for (let i = 0; i < _this.cardsArray.length; i++) {
-                console.log(_this.counter);
-                _this.cardsArray[i].updateMyTextureWithNewInformation(_this.data.data[_this.counter].answer);
-            }
+        for (let i = 0; i < whichGroup.length; i++) {
+            whichGroup[i].updateMyTextureWithNewInformation(_this.data.data[_this.counter].answer);
             if (_this.counter >= this.data.data.length-1) {
                 _this.counter = 0;
             } else {
                 _this.counter++;
             }
-        }, 1000);
+        }
+
+        // setInterval(() => {
+        //     for (let i = 0; i < _this.cardsArray.length; i++) {
+        //         _this.cardsArray[i].updateMyTextureWithNewInformation(_this.data.data[_this.counter].answer);
+        //     }
+        //     if (_this.counter >= this.data.data.length-1) {
+        //         _this.counter = 0;
+        //     } else {
+        //         _this.counter++;
+        //     }
+        // }, 1000);
     }
+    
 }

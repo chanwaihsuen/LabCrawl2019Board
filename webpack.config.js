@@ -83,14 +83,18 @@ module.exports = {
 		// hotUpdateMainFilename: '.hot/[hash].hot-update.json'
 	},
 	resolve: {
-		extensions: ['.js','.scss'],
+		extensions: ['.js', '.scss'],
 		alias: {
 			'imageAssets': path.resolve('app/images'),
 			'appRoot': path.resolve('./app'),
 			// 'jquery-ui': 'jquery-ui-dist/jquery-ui.js',
 			// bind to modules;
 			//modules: path.join(__dirname, "node_modules"),
-		}
+		},
+		modules: [
+			'node_modules',
+			path.resolve(__dirname, 'src')
+		]
 	},
 	plugins: [
 		new webpack.ProvidePlugin({
@@ -109,9 +113,9 @@ module.exports = {
 		}),
 		new webpack.HotModuleReplacementPlugin(),
 		new CopyWebpackPlugin([
-		    {
-		        from: '../app/images/',
-		        to: '../dist/images/'
+			{
+				from: '../app/images/',
+				to: '../dist/images/'
 			}
 		])
 	]

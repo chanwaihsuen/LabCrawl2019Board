@@ -3,12 +3,7 @@
 import * as THREE from 'three';
 import { CSS3DRenderer } from 'three-css3drenderer'
 import Config from 'appRoot/data/config';
-
-import {
-  TweenMax,
-  // TimelineMax,
-  Linear
-} from 'gsap/all';
+import { TweenMax, TimelineMax, Linear } from 'gsap/all';
 
 import Renderer from 'appRoot/js/components/renderer';
 import Camera from 'appRoot/js/components/camera';
@@ -22,13 +17,15 @@ import DatGUI from 'appRoot/js/managers/datGUI';
 import RoundedCard from 'appRoot/js/models/roundedCard';
 import SquareCard from 'appRoot/js/models/squareCard';
 import HtmlElement from 'appRoot/js/models/htmlElement';
+import CubeCard from 'appRoot/js/models/CubeCard';
 
 import GetSocialText from 'appRoot/js/views/GetSocialText.js'
+
 
 export default class Main {
 
   constructor(container) {
-    this.cardsArray = [];
+    this.allCardsArray = [];
 
     // Set container property to container element
     this.container = container;
@@ -37,7 +34,6 @@ export default class Main {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000);
     this.getSocialText = new GetSocialText();
-
     //
     // this.sceneForHTML = new THREE.Scene();
     // this.rendererForHTML = new CSS3DRenderer();
@@ -67,7 +63,7 @@ export default class Main {
     this.controls = new Controls(this.camera.threeCamera, container);
     new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
 
-    new DatGUI(this, this.cardsArray[0]);
+    new DatGUI(this, this.allCardsArray[0]);
     new Keyboard();
 
     // CREATE DECK
@@ -78,34 +74,55 @@ export default class Main {
   }
 
   createDeck() {
+    let _this = this;
     const cardSize = 30;
 
     var groupA = new THREE.Group();
     var groupB = new THREE.Group();
 
-    const startX = 0;
-    // const startY = -128;
-    const startY = 0;
+    var groupAArray = [];
+    var groupBArray = [];
+
+    const startX = 300;
+    // const startY = 0;
+
+    //const startX = 0;
+    const startY = -128;
     const padding = 2;
 
     let posX = startX;
     let posY = startY;
 
+    const sizingArray = [
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
+      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
+      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG',
+      'BIG', 'SMALL', 'BIG', 'BIG', 'SMALL',
+      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
+      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+    ];
+    let sizingArrayCounter = 0;
+
     for (let noY = 0; noY < 8; noY++) {
-      // if (noY === 4) {
-      //   posY = startY;
-      // }
+      if (noY === 4) {
+        posY = startY;
+      }
       for (let noX = 0; noX < 5; noX++) {
-        var singleCard = new SquareCard(posX, posY);
-        this.cardsArray.push(singleCard);
+        var singleCard = new SquareCard(posX, posY, sizingArray[sizingArrayCounter]);
+        this.allCardsArray.push(singleCard);
 
         if (noY < 4) {
           groupA.add(singleCard.mesh);
+          groupAArray.push(singleCard);
         } else {
           groupB.add(singleCard.mesh);
+          groupBArray.push(singleCard);
         }
 
         posX += (cardSize + padding)
+        sizingArrayCounter++;
       }
 
       posX = startX;
@@ -115,34 +132,42 @@ export default class Main {
     this.scene.add(groupA);
     this.scene.add(groupB);
 
-    // const timingOfMovingUp = 80;
+    const timingOfMovingUp = 20; //80;
 
-    // TweenMax.to(groupA.position, timingOfMovingUp, {
-    //   y: 256,
-    //   repeat: -1,
-    //   ease: Linear.easeNone
-    // });
-    // TweenMax.to(groupB.position, timingOfMovingUp, {
-    //   y: 256,
-    //   delay: timingOfMovingUp / 2,
-    //   repeat: -1,
-    //   ease: Linear.easeNone
-    // });
+    TweenMax.to(groupA.position, timingOfMovingUp, {
+      y: 256,
+      repeat: -1,
+      ease: Linear.easeNone,
+      onRepeat: function() {
+        console.log('GROUP A');
+        _this.getSocialText.changeText(groupAArray);
+      }
+    });
+    TweenMax.to(groupB.position, timingOfMovingUp, {
+      y: 256,
+      delay: timingOfMovingUp / 2,
+      repeat: -1,
+      ease: Linear.easeNone,
+      onRepeat: function() {
+        console.log('GROUP B');
+        _this.getSocialText.changeText(groupBArray);
+      }
+    });
 
-    this.getSocialText.cardsArray = this.cardsArray;
-    
+    this.getSocialText.allCardsArray = this.allCardsArray;
+
 
     document.addEventListener('keydown', (event) => {
       const keyCode = event.code;
       // console.log('keyCode', keyCode);
       if (keyCode === 'KeyS') {
-        for (let i = 0; i < this.cardsArray.length; i++) {
-          this.cardsArray[i].stopWindMotionAndFlipOut();
+        for (let i = 0; i < this.allCardsArray.length; i++) {
+          this.allCardsArray[i].stopWindMotionAndFlipOut();
         }
       }
       if (keyCode === 'KeyX') {
-        for (let i = 0; i < this.cardsArray.length; i++) {
-          this.cardsArray[i].returnToWind();
+        for (let i = 0; i < this.allCardsArray.length; i++) {
+          this.allCardsArray[i].returnToWind();
         }
       }
     }, false)
@@ -156,9 +181,9 @@ export default class Main {
     // Call any vendor or module frame updates here
     // TWEEN.update();
 
-    for (let i = 0; i < this.cardsArray.length; i++) {
-      if (this.cardsArray[i].selfSize === 'BIG') {
-        this.cardsArray[i].texturereturn().needsUpdate = true;
+    for (let i = 0; i < this.allCardsArray.length; i++) {
+      if (this.allCardsArray[i].selfSize === 'BIG') {
+        this.allCardsArray[i].texturereturn().needsUpdate = true;
       }
     }
 
