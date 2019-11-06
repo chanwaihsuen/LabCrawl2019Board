@@ -10,11 +10,37 @@ import base3 from 'appRoot/images/base3.png';
 import base4 from 'appRoot/images/base4.png';
 import base5 from 'appRoot/images/base5.png';
 import base6 from 'appRoot/images/base6.png';
+import base7 from 'appRoot/images/base7.png';
+import base8 from 'appRoot/images/base8.png';
+import base9 from 'appRoot/images/base9.png';
+import base10 from 'appRoot/images/base10.png';
+import base11 from 'appRoot/images/base11.png';
+import base12 from 'appRoot/images/base12.png';
+import base13 from 'appRoot/images/base13.png';
+import base14 from 'appRoot/images/base14.png';
+import base15 from 'appRoot/images/base15.png';
+import base16 from 'appRoot/images/base16.png';
+import base17 from 'appRoot/images/base17.png';
+import base18 from 'appRoot/images/base18.png';
+import base19 from 'appRoot/images/base19.png';
+import base20 from 'appRoot/images/base20.png';
+import base21 from 'appRoot/images/base21.png';
+import base22 from 'appRoot/images/base22.png';
+import base23 from 'appRoot/images/base23.png';
+import base24 from 'appRoot/images/base24.png';
+import base25 from 'appRoot/images/base25.png';
+import base26 from 'appRoot/images/base26.png';
+import base27 from 'appRoot/images/base27.png';
+import base28 from 'appRoot/images/base28.png';
+import base29 from 'appRoot/images/base29.png';
+import base30 from 'appRoot/images/base30.png';
 
 var loader = new THREE.CubeTextureLoader();
 loader.setPath('./images/');
 
-const imageArray = [base0, base1, base2, base3, base4, base5, base6];
+const imageArray = [
+  base0, base1, base2, base3, base4, base5, base6, base7, base8, base9, base10, base11, base12, base13, base14, base15,
+  base16, base17, base18, base19, base20, base21, base22, base23, base24, base25, base26, base27, base28, base29, base30];
 let imageArrayCounter = 0;
 
 
@@ -38,7 +64,7 @@ export default class SquareCard {
       repeat: -1,
       yoyo: false,
       repeatDelay: 8 * Math.random(),
-      onRepeat: function() {
+      onRepeat: function () {
         // console.log('callback');
       }
     });
@@ -117,7 +143,7 @@ export default class SquareCard {
     let mesh;
     let materialsArray = [];
     let sidesMat = new THREE.MeshPhongMaterial({
-      shininess: 100,
+      shininess: 1000,
       color: 0x333333
     });
 
@@ -155,14 +181,14 @@ export default class SquareCard {
     } else {
       // SMALL
       var imageTexture = new THREE.TextureLoader().load(imageArray[imageArrayCounter]);
-      if (imageArrayCounter < 5) {
-        imageArrayCounter++;
-      } else {
+      if (imageArrayCounter > imageArray.length - 1) {
         imageArrayCounter = 0;
+      } else {
+        imageArrayCounter++;
       }
 
       const materialFlat = new THREE.MeshPhongMaterial({
-        shininess: 100,
+        shininess: 10,
         map: imageTexture
       });
 

@@ -76,6 +76,7 @@ export default class Main {
   createDeck() {
     let _this = this;
     const cardSize = 30;
+    const padding = 2;
 
     var groupA = new THREE.Group();
     var groupB = new THREE.Group();
@@ -84,11 +85,8 @@ export default class Main {
     var groupBArray = [];
 
     const startX = 300;
-    // const startY = 0;
-
-    //const startX = 0;
     const startY = -128;
-    const padding = 2;
+
 
     let posX = startX;
     let posY = startY;
@@ -104,12 +102,14 @@ export default class Main {
       'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
     ];
     let sizingArrayCounter = 0;
+    const noOfVerticalTiles = 8;
+    const noOfHorizontalTiles = 5
 
-    for (let noY = 0; noY < 8; noY++) {
-      if (noY === 4) {
+    for (let noY = 0; noY < noOfVerticalTiles; noY++) {
+      if (noY === (noOfVerticalTiles / 2)) {
         posY = startY;
       }
-      for (let noX = 0; noX < 5; noX++) {
+      for (let noX = 0; noX < noOfHorizontalTiles; noX++) {
         var singleCard = new SquareCard(posX, posY, sizingArray[sizingArrayCounter]);
         this.allCardsArray.push(singleCard);
 
@@ -131,31 +131,30 @@ export default class Main {
 
     this.scene.add(groupA);
     this.scene.add(groupB);
+    this.getSocialText.allCardsArray = this.allCardsArray;
 
     const timingOfMovingUp = 20; //80;
+    const amtToMove = (noOfVerticalTiles * cardSize) + (noOfVerticalTiles * padding)
 
     TweenMax.to(groupA.position, timingOfMovingUp, {
-      y: 256,
+      y: amtToMove,
       repeat: -1,
       ease: Linear.easeNone,
-      onRepeat: function() {
+      onRepeat: function () {
         console.log('GROUP A');
         _this.getSocialText.changeText(groupAArray);
       }
     });
     TweenMax.to(groupB.position, timingOfMovingUp, {
-      y: 256,
+      y: amtToMove,
       delay: timingOfMovingUp / 2,
       repeat: -1,
       ease: Linear.easeNone,
-      onRepeat: function() {
+      onRepeat: function () {
         console.log('GROUP B');
         _this.getSocialText.changeText(groupBArray);
       }
     });
-
-    this.getSocialText.allCardsArray = this.allCardsArray;
-
 
     document.addEventListener('keydown', (event) => {
       const keyCode = event.code;
