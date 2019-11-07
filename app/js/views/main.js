@@ -133,7 +133,7 @@ export default class Main {
     this.scene.add(groupB);
     this.getSocialText.allCardsArray = this.allCardsArray;
 
-    const timingOfMovingUp = 10; //80;
+    const timingOfMovingUp = 20; //80;
     const amtToMove = (noOfVerticalTiles * cardSize) + (noOfVerticalTiles * padding)
 
     TweenMax.to(groupA.position, timingOfMovingUp, {

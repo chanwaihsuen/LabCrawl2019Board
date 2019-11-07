@@ -32,7 +32,6 @@ app.get('/test', cors(corsOptions), function (req, res) {
   res.status(200).send('connected');
 });
 
-
 // ==================================== API TO GET DATA ====================================
 // app.set('view engine, 'ejs);
 
@@ -48,36 +47,59 @@ app.get('/getData', cors(corsOptions), function (req, res) {
   // Callback function pulling data
   function datapull(auth) {
     const sheets = google.sheets({ version: 'v4', auth });
-    var result = sheets.spreadsheets.values.get({
+
+    var result = sheets.spreadsheets.values.batchGet({
       spreadsheetId: spreadsheetId,
-      range: 'LabcrawlResponse!A2:E',
+      ranges: ['LabcrawlResponse!A2:E', 'EchonetResponses!A2:C'],
     }, (err, response) => {
       if (err) return console.log('The API returned an error: ' + err);
 
-      const rows = response.data.values;
 
+      const labcrawlSheet = response.data.valueRanges[0].values;
+      const echonetSheet = response.data.valueRanges[1].values;
       var responseArray = [];
-      for (index in rows) {
+
+      for (index in labcrawlSheet) {
         var responseObj = {};
-        responseObj.created = rows[index][0];
-        var date = new Date(rows[index][0]);
+        responseObj.created = labcrawlSheet[index][0];
+        var date = new Date(labcrawlSheet[index][0]);
         responseObj.createdDate = date.getDate();
         responseObj.createdTime = date.getTime();
-        responseObj.question = rows[index][1];
+        responseObj.question = labcrawlSheet[index][1];
 
-        switch (rows[index].length) {
+        switch (labcrawlSheet[index].length) {
           case 3:
             responseObj.questionType = 0;
-            responseObj.answer = rows[index][2].trim();
+            responseObj.answer = labcrawlSheet[index][2].trim();
             break;
           case 4:
             responseObj.questionType = 1;
-            responseObj.answer = rows[index][3].trim();
+            responseObj.answer = labcrawlSheet[index][3].trim();
             break;
           case 5:
             responseObj.questionType = 2;
-            responseObj.answer = rows[index][4].trim();
+            responseObj.answer = labcrawlSheet[index][4].trim();
             break;
+        }
+        responseArray.push(responseObj);
+      }
+
+      for (index in echonetSheet) {
+        var responseObj = {};
+        if (echonetSheet[index][0].trim() !== "") {
+          responseObj.question = 'I help save the planet at my workplace!';
+          responseObj.questionType = 0;
+          responseObj.answer = echonetSheet[index][0].trim();
+        }
+        if (echonetSheet[index][1].trim() !== "") {
+          responseObj.question = 'I’m a green champion when I’m out and about!';
+          responseObj.questionType = 1;
+          responseObj.answer = echonetSheet[index][1].trim();
+        }
+        if (echonetSheet[index][2].trim() !== "") {
+          responseObj.question = 'I practice what I preach – starting at home!';
+          responseObj.questionType = 2;
+          responseObj.answer = echonetSheet[index][2].trim();
         }
         responseArray.push(responseObj);
       }
@@ -87,10 +109,12 @@ app.get('/getData', cors(corsOptions), function (req, res) {
           res.status(500);
           throw new Error('JSON NOT SAVED')
         }
-        res.status(200).send('JSON SAVED');
+        // res.status(200).send('JSON SAVED');
+        res.status(200).send(JSON.stringify(responseArray));
       });
 
       // res.status(200).send(JSON.stringify(responseArray));
+      // res.status(200).send(JSON.stringify(response.data.valueRanges[0]));
     });
   }
 

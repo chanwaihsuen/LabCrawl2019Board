@@ -71,7 +71,7 @@ export default {
   },
   directionalLight: {
     enabled: true,
-    color: 0xFFFFFF,
+    color: 0xff77,
     intensity: 0.4,
     x: 0,
     y: 0,

@@ -45,11 +45,11 @@ let imageArrayCounter = 0;
 
 
 const maxWidth = 980;
-const lineHeight = 100;
+const lineHeight = 146;
 const cX = 60;
 const cY = 140;
 
-const testString = 'one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty one twenty.';
+const testString = 'one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen.';
 let testCounter = 0;
 
 export default class SquareCard {
@@ -110,7 +110,7 @@ export default class SquareCard {
   putTextonCanvas(canvas, ctx, text, x, y, maxWidth, lineHeight) {
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = '74pt Helvetica';
+    ctx.font = '96pt Helvetica';
     ctx.fillStyle = '#FFFFFF';
 
     let words = text.split(' ');
@@ -163,7 +163,7 @@ export default class SquareCard {
       this.putTextonCanvas(canvas, ctx, this.text, cX, cY, maxWidth, lineHeight);
 
       var materialCanvas = new THREE.MeshPhongMaterial({
-        shininess: 100,
+        shininess: 1000,
         //wireframe: true,
         //flatShading: true,
         map: this.texture
@@ -187,9 +187,14 @@ export default class SquareCard {
         imageArrayCounter++;
       }
 
-      const materialFlat = new THREE.MeshBasicMaterial({
+      
+      const materialFlat = new THREE.MeshPhongMaterial({
+        shininess: 1000,
         map: imageTexture
       });
+      // const materialFlat = new THREE.MeshBasicMaterial({
+      //   map: imageTexture
+      // });
 
       materialsArray = [
         sidesMat,        // Left side

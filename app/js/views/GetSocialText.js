@@ -67,7 +67,8 @@ export default class GetSocialText {
         let _this = this;
         for (let i = 0; i < whichGroup.length; i++) {
             // console.log('_this.counter', _this.counter);
-            whichGroup[i].updateMyTextureWithNewInformation(_this.submittedData[_this.counter].answer);
+            let theTextToDisplay = _this.submittedData[_this.counter].answer;
+            whichGroup[i].updateMyTextureWithNewInformation(theTextToDisplay);
             if (_this.counter >= this.submittedData.length - 1) {
                 _this.counter = 0;
                 _this.getNewData();
