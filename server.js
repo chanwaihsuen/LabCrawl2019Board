@@ -60,6 +60,11 @@ app.get('/getData', cors(corsOptions), function (req, res) {
       var responseArray = [];
 
       for (index in labcrawlSheet) {
+        
+        if (labcrawlSheet[index][0] === "") {
+          continue;
+        }
+
         var responseObj = {};
         responseObj.created = labcrawlSheet[index][0];
         var date = new Date(labcrawlSheet[index][0]);
@@ -85,6 +90,11 @@ app.get('/getData', cors(corsOptions), function (req, res) {
       }
 
       for (index in echonetSheet) {
+        
+        if (echonetSheet[index][0] === "") {
+          continue;
+        }
+
         var responseObj = {};
         if (echonetSheet[index][0].trim() !== "") {
           responseObj.question = 'I help save the planet at my workplace!';

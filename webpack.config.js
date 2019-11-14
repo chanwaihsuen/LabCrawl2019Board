@@ -115,7 +115,19 @@ module.exports = {
 		new CopyWebpackPlugin([
 			{
 				from: '../app/images/',
-				to: '../dist/images/'
+				to: '../dist/images/',
+
+				from: '../app/data/',
+				to: '../dist/data/',
+				
+				from: '../credentials.json',
+				to: '../dist/credentials.json',
+
+				from: '../token.json',
+				to: '../dist/token.json',
+
+				from: '../server.js',
+				to: '../dist/server.js',
 			}
 		])
 	]
