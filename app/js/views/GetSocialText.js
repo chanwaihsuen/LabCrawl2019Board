@@ -12,7 +12,7 @@ export default class GetSocialText {
     }
 
     refreshJson() {
-        console.log('refreshJson');
+        console.log('refreshJson getting from SERVER');
         let _this = this;
 
         axios.get('http://localhost:3000/getData')

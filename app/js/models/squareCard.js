@@ -113,6 +113,12 @@ export default class SquareCard {
     ctx.font = '96pt Helvetica';
     ctx.fillStyle = '#FFFFFF';
 
+    if (!text) {
+      return;
+    }
+    if (text === "") {
+      return;
+    }
     let words = text.split(' ');
     let line = '';
 

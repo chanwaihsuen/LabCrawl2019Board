@@ -61,36 +61,50 @@ app.get('/getData', cors(corsOptions), function (req, res) {
 
       for (index in labcrawlSheet) {
 
-        if (labcrawlSheet[index][0] === "" || labcrawlSheet[index][1] === "") {
+        if (labcrawlSheet[index][0] == "" || labcrawlSheet[index][1] == "") {
           continue;
         }
 
-        if (labcrawlSheet[index][2] !== "" || labcrawlSheet[index][3] !== "" || labcrawlSheet[index][4] !== "") {
-
-          var responseObj = {};
-          responseObj.created = labcrawlSheet[index][0];
-          var date = new Date(labcrawlSheet[index][0]);
-          responseObj.createdDate = date.getDate();
-          responseObj.createdTime = date.getTime();
-          responseObj.question = labcrawlSheet[index][1];
-
-          switch (labcrawlSheet[index].length) {
-            case 3:
-              responseObj.questionType = 0;
-              responseObj.answer = labcrawlSheet[index][2].trim();
-              break;
-            case 4:
-              responseObj.questionType = 1;
-              responseObj.answer = labcrawlSheet[index][3].trim();
-              break;
-            case 5:
-              responseObj.questionType = 2;
-              responseObj.answer = labcrawlSheet[index][4].trim();
-              break;
-          }
-          responseArray.push(responseObj);
-
+        if (labcrawlSheet[index][2] && labcrawlSheet[index][3] && labcrawlSheet[index][4]) {
+          continue;
         }
+
+        if (labcrawlSheet[index].length < 3) {
+          continue;
+        }
+
+        var responseObj = {};
+        responseObj.created = labcrawlSheet[index][0];
+        var date = new Date(labcrawlSheet[index][0]);
+        responseObj.createdDate = date.getDate();
+        responseObj.createdTime = date.getTime();
+        responseObj.question = labcrawlSheet[index][1];
+
+        switch (labcrawlSheet[index].length) {
+          case 3:
+            if (labcrawlSheet[index][2].length < 1 || !labcrawlSheet[index][2]) {
+              continue;
+            }
+            responseObj.questionType = 0;
+            responseObj.answer = labcrawlSheet[index][2].trim();
+            break;
+          case 4:
+            if (labcrawlSheet[index][3].length < 1 || !labcrawlSheet[index][3]) {
+              continue;
+            }
+            responseObj.questionType = 1;
+            responseObj.answer = labcrawlSheet[index][3].trim();
+            break;
+          case 5:
+            if (labcrawlSheet[index][4].length < 1 || !labcrawlSheet[index][4]) {
+              continue;
+            }
+            responseObj.questionType = 2;
+            responseObj.answer = labcrawlSheet[index][4].trim();
+            break;
+        }
+        responseArray.push(responseObj);
+
       }
 
       // for (index in echonetSheet) {
