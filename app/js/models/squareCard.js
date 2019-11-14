@@ -63,7 +63,7 @@ export default class SquareCard {
     this.windMotion = new TimelineMax({
       repeat: -1,
       yoyo: false,
-      repeatDelay: 8 * Math.random() + 3,
+      repeatDelay: 8 * Math.random() + 1,
       onRepeat: function () {
         // console.log('callback');
       }
@@ -83,11 +83,11 @@ export default class SquareCard {
     // }
 
     if (size === 'BIG') {
-      this.mesh = this.createSquareRect(x, y);
       this.selfSize = 'BIG';
+      this.mesh = this.createSquareRect(x, y);
     } else {
-      this.mesh = this.createSmallerRect(x, y);
       this.selfSize = 'SMALL';
+      this.mesh = this.createSmallerRect(x, y);
     }
   }
 
@@ -193,7 +193,7 @@ export default class SquareCard {
         imageArrayCounter++;
       }
 
-      
+
       const materialFlat = new THREE.MeshBasicMaterial({
         // shininess: 1000,
         map: imageTexture
@@ -247,18 +247,21 @@ export default class SquareCard {
     //   ease: Linear.easeNone
     // }));
 
-    this.windMotion.add(TweenMax.to(mesh.rotation, 3, {
-      x: THREE.Math.degToRad(360),
-      ease: Linear.easeNone,
-    }));
+    if (this.selfSize === 'SMALL') {
+      this.windMotion.add(TweenMax.to(mesh.rotation, 3, {
+        x: THREE.Math.degToRad(360),
+        ease: Linear.easeNone,
+      }));
+    }
+
 
     // =======
-    this.cardsTimeline.addLabel('flipout', 3);
-    this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.3, {
-      x: THREE.Math.degToRad(180),
-      y: THREE.Math.degToRad(180),
-      ease: Linear.easeNone
-    }));
+    // this.cardsTimeline.addLabel('flipout', 3);
+    // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.3, {
+    //   x: THREE.Math.degToRad(180),
+    //   y: THREE.Math.degToRad(180),
+    //   ease: Linear.easeNone
+    // }));
     // this.cardsTimeline.add(TweenMax.to(mesh.rotation, 1 * Math.random() + 0.8, {
     //   x: THREE.Math.degToRad(180),
     //   y: THREE.Math.degToRad(180),

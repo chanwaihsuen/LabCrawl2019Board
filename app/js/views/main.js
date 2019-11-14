@@ -159,16 +159,16 @@ export default class Main {
     document.addEventListener('keydown', (event) => {
       const keyCode = event.code;
       // console.log('keyCode', keyCode);
-      if (keyCode === 'KeyS') {
-        for (let i = 0; i < this.allCardsArray.length; i++) {
-          this.allCardsArray[i].stopWindMotionAndFlipOut();
-        }
-      }
-      if (keyCode === 'KeyX') {
-        for (let i = 0; i < this.allCardsArray.length; i++) {
-          this.allCardsArray[i].returnToWind();
-        }
-      }
+      // if (keyCode === 'KeyS') {
+      //   for (let i = 0; i < this.allCardsArray.length; i++) {
+      //     this.allCardsArray[i].stopWindMotionAndFlipOut();
+      //   }
+      // }
+      // if (keyCode === 'KeyX') {
+      //   for (let i = 0; i < this.allCardsArray.length; i++) {
+      //     this.allCardsArray[i].returnToWind();
+      //   }
+      // }
       if (keyCode === 'KeyF') {
         this.openFullscreen();
       }
