@@ -142,8 +142,8 @@ export default class SquareCard {
     let geometry = new THREE.BoxGeometry(width, height, 1);
     let mesh;
     let materialsArray = [];
-    let sidesMat = new THREE.MeshPhongMaterial({
-      shininess: 1000,
+    let sidesMat = new THREE.MeshBasicMaterial({
+      // shininess: 1000,
       color: 0x333333
     });
 
@@ -188,8 +188,8 @@ export default class SquareCard {
       }
 
       
-      const materialFlat = new THREE.MeshPhongMaterial({
-        shininess: 1000,
+      const materialFlat = new THREE.MeshBasicMaterial({
+        // shininess: 1000,
         map: imageTexture
       });
       // const materialFlat = new THREE.MeshBasicMaterial({

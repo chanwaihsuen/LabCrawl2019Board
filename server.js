@@ -60,59 +60,63 @@ app.get('/getData', cors(corsOptions), function (req, res) {
       var responseArray = [];
 
       for (index in labcrawlSheet) {
-        
-        if (labcrawlSheet[index][0] === "") {
+
+        if (labcrawlSheet[index][0] === "" || labcrawlSheet[index][1] === "") {
           continue;
         }
 
-        var responseObj = {};
-        responseObj.created = labcrawlSheet[index][0];
-        var date = new Date(labcrawlSheet[index][0]);
-        responseObj.createdDate = date.getDate();
-        responseObj.createdTime = date.getTime();
-        responseObj.question = labcrawlSheet[index][1];
+        if (labcrawlSheet[index][2] !== "" || labcrawlSheet[index][3] !== "" || labcrawlSheet[index][4] !== "") {
 
-        switch (labcrawlSheet[index].length) {
-          case 3:
-            responseObj.questionType = 0;
-            responseObj.answer = labcrawlSheet[index][2].trim();
-            break;
-          case 4:
-            responseObj.questionType = 1;
-            responseObj.answer = labcrawlSheet[index][3].trim();
-            break;
-          case 5:
-            responseObj.questionType = 2;
-            responseObj.answer = labcrawlSheet[index][4].trim();
-            break;
+          var responseObj = {};
+          responseObj.created = labcrawlSheet[index][0];
+          var date = new Date(labcrawlSheet[index][0]);
+          responseObj.createdDate = date.getDate();
+          responseObj.createdTime = date.getTime();
+          responseObj.question = labcrawlSheet[index][1];
+
+          switch (labcrawlSheet[index].length) {
+            case 3:
+              responseObj.questionType = 0;
+              responseObj.answer = labcrawlSheet[index][2].trim();
+              break;
+            case 4:
+              responseObj.questionType = 1;
+              responseObj.answer = labcrawlSheet[index][3].trim();
+              break;
+            case 5:
+              responseObj.questionType = 2;
+              responseObj.answer = labcrawlSheet[index][4].trim();
+              break;
+          }
+          responseArray.push(responseObj);
+
         }
-        responseArray.push(responseObj);
       }
 
-      for (index in echonetSheet) {
-        
-        if (echonetSheet[index][0] === "") {
-          continue;
-        }
+      // for (index in echonetSheet) {
 
-        var responseObj = {};
-        if (echonetSheet[index][0].trim() !== "") {
-          responseObj.question = 'I help save the planet at my workplace!';
-          responseObj.questionType = 0;
-          responseObj.answer = echonetSheet[index][0].trim();
-        }
-        if (echonetSheet[index][1].trim() !== "") {
-          responseObj.question = 'I’m a green champion when I’m out and about!';
-          responseObj.questionType = 1;
-          responseObj.answer = echonetSheet[index][1].trim();
-        }
-        if (echonetSheet[index][2].trim() !== "") {
-          responseObj.question = 'I practice what I preach – starting at home!';
-          responseObj.questionType = 2;
-          responseObj.answer = echonetSheet[index][2].trim();
-        }
-        responseArray.push(responseObj);
-      }
+      //   if (echonetSheet[index][0] === "") {
+      //     continue;
+      //   }
+
+      //   var responseObj = {};
+      //   if (echonetSheet[index][0].trim() !== "") {
+      //     responseObj.question = 'I help save the planet at my workplace!';
+      //     responseObj.questionType = 0;
+      //     responseObj.answer = echonetSheet[index][0].trim();
+      //   }
+      //   if (echonetSheet[index][1].trim() !== "") {
+      //     responseObj.question = 'I’m a green champion when I’m out and about!';
+      //     responseObj.questionType = 1;
+      //     responseObj.answer = echonetSheet[index][1].trim();
+      //   }
+      //   if (echonetSheet[index][2].trim() !== "") {
+      //     responseObj.question = 'I practice what I preach – starting at home!';
+      //     responseObj.questionType = 2;
+      //     responseObj.answer = echonetSheet[index][2].trim();
+      //   }
+      //   responseArray.push(responseObj);
+      // }
 
       saveToFile(responseArray, function (err) {
         if (err) {
