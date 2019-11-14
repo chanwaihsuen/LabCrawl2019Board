@@ -67,11 +67,11 @@ export default {
   },
   ambientLight: {
     enabled: true,
-    color: 0xFFFFFF
+    color: 0xffffff
   },
   directionalLight: {
-    enabled: true,
-    color: 0xff77,
+    enabled: false,
+    color: 0xffffff,
     intensity: 0.4,
     x: 0,
     y: 0,
@@ -91,7 +91,7 @@ export default {
     left: -100
   },
   pointLight: {
-    enabled: true,
+    enabled: false,
     color: 0xffffff,
     intensity: 0.30,
     distance: 200,
