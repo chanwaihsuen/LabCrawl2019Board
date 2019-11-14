@@ -92,18 +92,18 @@ export default class Main {
     let posY = startY;
 
     const sizingArray = [
-      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
-      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'SMALL', 'SMALL', 'BIG',
-      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
-      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG', 'BIG', 'SMALL', 'SMALL',
-      'BIG', 'SMALL', 'BIG', 'BIG', 'SMALL', 'SMALL', 'BIG', 'SMALL',
-      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
-      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
-      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG'
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'SMALL', 'BIG',
+      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
     ];
     let sizingArrayCounter = 0;
     const noOfVerticalTiles = 8;
-    const noOfHorizontalTiles = 8
+    const noOfHorizontalTiles = 6
 
     for (let noY = 0; noY < noOfVerticalTiles; noY++) {
       if (noY === (noOfVerticalTiles / 2)) {
