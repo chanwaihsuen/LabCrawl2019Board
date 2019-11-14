@@ -92,18 +92,18 @@ export default class Main {
     let posY = startY;
 
     const sizingArray = [
-      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
-      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
-      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
-      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG',
-      'BIG', 'SMALL', 'BIG', 'BIG', 'SMALL',
-      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG',
-      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG',
-      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'SMALL', 'SMALL', 'BIG',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG', 'BIG', 'SMALL', 'SMALL',
+      'BIG', 'SMALL', 'BIG', 'BIG', 'SMALL', 'SMALL', 'BIG', 'SMALL',
+      'SMALL', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL',
+      'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG', 'SMALL', 'BIG'
     ];
     let sizingArrayCounter = 0;
     const noOfVerticalTiles = 8;
-    const noOfHorizontalTiles = 5
+    const noOfHorizontalTiles = 8
 
     for (let noY = 0; noY < noOfVerticalTiles; noY++) {
       if (noY === (noOfVerticalTiles / 2)) {
@@ -133,7 +133,7 @@ export default class Main {
     this.scene.add(groupB);
     this.getSocialText.allCardsArray = this.allCardsArray;
 
-    const timingOfMovingUp = 20; //80;
+    const timingOfMovingUp = 80;
     const amtToMove = (noOfVerticalTiles * cardSize) + (noOfVerticalTiles * padding)
 
     TweenMax.to(groupA.position, timingOfMovingUp, {

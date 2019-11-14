@@ -7,7 +7,7 @@ export default class GetSocialText {
         this.submittedData;
         this.counter = 0;
         this.lastDataLength = 0;
-        // this.refreshJson();
+        this.refreshJson();
         this.getNewData();
     }
 
@@ -15,21 +15,21 @@ export default class GetSocialText {
         console.log('refreshJson');
         let _this = this;
 
-        // axios.get('http://localhost:3000/getData')
-        //     .then(function (response) {
-        //         // handle success
-        //     })
-        //     .catch(function (error) {
-        //         // handle error
-        //         console.log(error);
-        //     })
-        //     .finally(function () {
-        //         // always executed
-        //         setTimeout(() => {
-        //             console.log('refreshJson SETTIMEOUT');
-        //             _this.refreshJson();
-        //         }, 100 * 1000);
-        //     });
+        axios.get('http://localhost:3000/getData')
+            .then(function (response) {
+                // handle success
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+                setTimeout(() => {
+                    console.log('refreshJson SETTIMEOUT');
+                    _this.refreshJson();
+                }, 5 * 60 * 1000);
+            });
     }
 
     getNewData() {
