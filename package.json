@@ -64,7 +64,7 @@
     "multer": "^1.4.1",
     "nodemon": "^1.19.4",
     "popper.js": "^1.15.0",
-    "postprocessing": "^6.7.0",
+    "postprocessing": "^6.20.3",
     "react-app-polyfill": "^2.0.0",
     "three": "^0.109.0",
     "three-addons": "^1.2.0",
